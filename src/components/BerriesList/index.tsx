@@ -2,18 +2,32 @@ import { Row } from 'antd';
 
 import React, { Component } from 'react';
 import Berry from '../Berry';
-import { BerriesListProps } from './types/types';
+import { BerriesListProps, BerriesListState } from './types/types';
+import searchBerries from '../../utils/sort';
+import SearchInput from '../SearchInput';
 
-export default class BerriesList extends Component<BerriesListProps> {
+export default class BerriesList extends Component<BerriesListProps, BerriesListState> {
+  constructor(props: BerriesListProps) {
+    super(props);
+
+    this.state = { query: '' };
+  }
+
   render() {
     const { berries } = this.props;
+    const { query } = this.state;
+
+    const findedBerries = searchBerries(query, berries);
 
     return (
-      <Row gutter={[16, 24]}>
-        {berries.map((berry) => (
-          <Berry key={berry.name} berry={berry} />
-        ))}
-      </Row>
+      <>
+        <SearchInput setQuery={(val: string) => this.setState({ query: val })} />
+        <Row gutter={[16, 24]}>
+          {findedBerries.map((berry) => (
+            <Berry key={berry.name} berry={berry} />
+          ))}
+        </Row>
+      </>
     );
   }
 }
