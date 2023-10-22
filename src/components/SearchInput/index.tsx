@@ -17,9 +17,26 @@ export default class SearchInput extends Component<SearchInputProps, SearchInput
     this.state = { inputValue: '' };
   }
 
+  componentDidMount(): void {
+    const localQuery = localStorage.getItem('query');
+
+    if (localQuery) {
+      const { setQuery } = this.props;
+      this.setState({ inputValue: localQuery });
+      setQuery(localQuery);
+    }
+  }
+
+  toLocalStorage = () => {
+    const { inputValue } = this.state;
+
+    localStorage.setItem('query', inputValue);
+  };
+
   onSearch = (value: string) => {
     const { setQuery } = this.props;
     setQuery(value);
+    this.toLocalStorage();
   };
 
   render() {
