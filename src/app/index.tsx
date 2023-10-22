@@ -3,6 +3,7 @@ import { Spin, Alert } from 'antd';
 import BerriesAPI from '../API/Berries';
 import BerriesList from '../components/BerriesList';
 import { OneBerry } from '../API/types/interfaces';
+import FallbackUIButton from '../components/FallbackUIButton';
 
 type AppState = {
   berries: OneBerry[];
@@ -49,7 +50,12 @@ class App extends Component<NonNullable<unknown>, AppState> {
         content = <Alert message="Error !!!" description={error} type="error" />;
         break;
       default:
-        content = <BerriesList berries={berries} />;
+        content = (
+          <>
+            <BerriesList berries={berries} />
+            <FallbackUIButton />
+          </>
+        );
         break;
     }
 
