@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Card } from 'antd';
 import { BerryProps } from './types/types';
+import { Col } from '../../styles';
+import { Card, CardHeader, CardLink } from './styles';
 
 class Berry extends Component<BerryProps> {
   render() {
@@ -9,9 +10,10 @@ class Berry extends Component<BerryProps> {
     } = this.props;
 
     return (
-      <Col span={6}>
-        <Card title={name} size="small">
-          <a href={url}>To berry</a>
+      <Col $span={3}>
+        <Card>
+          <CardHeader>{name}</CardHeader>
+          <CardLink href={url}>To berry</CardLink>
         </Card>
       </Col>
     );

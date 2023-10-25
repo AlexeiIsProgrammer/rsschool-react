@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import { Button } from 'antd';
 import { FallbackUIButtonState } from './types/types';
+import { Button } from '../../styles';
 
 export default class FallbackUIButton extends Component<
   NonNullable<unknown>,
@@ -22,11 +22,7 @@ export default class FallbackUIButton extends Component<
         throw new Error('Test error throwing');
 
       default:
-        content = (
-          <Button onClick={() => this.setState({ isError: true })} type="dashed">
-            Get an error
-          </Button>
-        );
+        content = <Button onClick={() => this.setState({ isError: true })}>Get an error</Button>;
         break;
     }
 

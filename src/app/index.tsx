@@ -1,9 +1,11 @@
 import { Component } from 'react';
-import { Spin, Alert } from 'antd';
 import BerriesAPI from '../API/Berries';
 import BerriesList from '../components/BerriesList';
 import { OneBerry } from '../API/types/interfaces';
 import FallbackUIButton from '../components/FallbackUIButton';
+import Spinner from '../components/Spinner';
+import Alert from '../components/Alert';
+import { ContainerWrapper } from '../styles';
 
 type AppState = {
   berries: OneBerry[];
@@ -44,17 +46,17 @@ class App extends Component<NonNullable<unknown>, AppState> {
 
     switch (true) {
       case loading:
-        content = <Spin />;
+        content = <Spinner />;
         break;
       case error !== '':
         content = <Alert message="Error !!!" description={error} type="error" />;
         break;
       default:
         content = (
-          <>
+          <ContainerWrapper>
             <BerriesList berries={berries} />
             <FallbackUIButton />
-          </>
+          </ContainerWrapper>
         );
         break;
     }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Input } from 'antd';
-
-const { Search } = Input;
+import { Search, SearchInputWrapper } from './styles';
+import { Button } from '../../styles';
 
 type SearchInputState = {
   inputValue: string;
@@ -33,9 +32,11 @@ export default class SearchInput extends Component<SearchInputProps, SearchInput
     localStorage.setItem('query', inputValue);
   };
 
-  onSearch = (value: string) => {
+  onSearch = () => {
     const { setQuery } = this.props;
-    setQuery(value);
+    const { inputValue } = this.state;
+
+    setQuery(inputValue);
     this.toLocalStorage();
   };
 
@@ -43,15 +44,14 @@ export default class SearchInput extends Component<SearchInputProps, SearchInput
     const { inputValue } = this.state;
 
     return (
-      <Search
-        style={{ marginBottom: '10px' }}
-        placeholder="Search your Berry"
-        onSearch={this.onSearch}
-        onChange={(e) => this.setState({ inputValue: e.target.value })}
-        value={inputValue}
-        enterButton="Search"
-        size="large"
-      />
+      <SearchInputWrapper>
+        <Search
+          placeholder="Search your Berry"
+          onChange={(e) => this.setState({ inputValue: e.target.value })}
+          value={inputValue}
+        />
+        <Button onClick={this.onSearch}>Search</Button>
+      </SearchInputWrapper>
     );
   }
 }

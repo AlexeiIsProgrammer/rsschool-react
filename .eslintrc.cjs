@@ -48,5 +48,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'consistent-return': 'off',
     'react/prefer-stateless-function': 'off',
+    'import/prefer-default-export': 'off',
   },
 };

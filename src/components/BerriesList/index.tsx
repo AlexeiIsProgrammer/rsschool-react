@@ -1,10 +1,9 @@
-import { Row } from 'antd';
-
 import React, { Component } from 'react';
 import Berry from '../Berry';
 import { BerriesListProps, BerriesListState } from './types/types';
 import searchBerries from '../../utils/sort';
 import SearchInput from '../SearchInput';
+import { ContainerWrapper, Row } from '../../styles';
 
 export default class BerriesList extends Component<BerriesListProps, BerriesListState> {
   constructor(props: BerriesListProps) {
@@ -20,14 +19,14 @@ export default class BerriesList extends Component<BerriesListProps, BerriesList
     const findedBerries = searchBerries(query, berries);
 
     return (
-      <>
+      <ContainerWrapper>
         <SearchInput setQuery={(val: string) => this.setState({ query: val })} />
-        <Row gutter={[16, 24]}>
+        <Row>
           {findedBerries.map((berry) => (
             <Berry key={berry.name} berry={berry} />
           ))}
         </Row>
-      </>
+      </ContainerWrapper>
     );
   }
 }

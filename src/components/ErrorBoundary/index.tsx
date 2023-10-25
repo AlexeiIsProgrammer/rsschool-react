@@ -1,6 +1,6 @@
 import { Component, ErrorInfo } from 'react';
-import { Alert } from 'antd';
 import { ErrorBoundaryProps, ErrorBoundaryState } from './types/types';
+import Alert from '../Alert';
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
