@@ -1,5 +1,5 @@
-import { OnePokemon } from '../API/types/interfaces';
+import { Pokemon } from '../API/types/interfaces';
 
-export default function searchPokemons(query: string, berries: OnePokemon[]): OnePokemon[] {
-  return berries.filter((berry) => berry.name.includes(query));
+export default function searchPokemons(query: string, pokemons: Pokemon[]): Pokemon[] {
+  return pokemons.filter((pokemon) => pokemon.name.includes(query));
 }
