@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import BerriesList from '../components/PokemonsList';
+import PokemonsList from '../components/PokemonsList';
 import FallbackUIButton from '../components/FallbackUIButton';
 import Spinner from '../components/Spinner';
 import Alert from '../components/Alert';
@@ -14,10 +14,10 @@ class App extends Component<NonNullable<unknown>, AppState> {
   }
 
   componentDidMount(): void {
-    this.fetchBerries();
+    this.fetchPokemons();
   }
 
-  fetchBerries = async () => {
+  fetchPokemons = async () => {
     this.setState({ loading: true });
     this.setState({ error: '' });
 
@@ -48,7 +48,7 @@ class App extends Component<NonNullable<unknown>, AppState> {
       default:
         content = (
           <ContainerWrapper>
-            <BerriesList pokemons={pokemons} />
+            <PokemonsList pokemons={pokemons} />
             <FallbackUIButton />
           </ContainerWrapper>
         );
