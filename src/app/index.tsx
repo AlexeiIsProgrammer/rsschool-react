@@ -1,22 +1,16 @@
 import { Component } from 'react';
-import BerriesAPI from '../API/Berries';
-import BerriesList from '../components/BerriesList';
-import { OneBerry } from '../API/types/interfaces';
+import BerriesList from '../components/PokemonsList';
 import FallbackUIButton from '../components/FallbackUIButton';
 import Spinner from '../components/Spinner';
 import Alert from '../components/Alert';
 import { ContainerWrapper } from '../styles';
-
-type AppState = {
-  berries: OneBerry[];
-  loading: boolean;
-  error: string;
-};
+import PokemonsAPI from '../API/Pokemons';
+import { AppState } from './types/types';
 
 class App extends Component<NonNullable<unknown>, AppState> {
   constructor(props: NonNullable<unknown>) {
     super(props);
-    this.state = { loading: false, error: '', berries: [] };
+    this.state = { loading: false, error: '', pokemons: [] };
   }
 
   componentDidMount(): void {
@@ -27,13 +21,13 @@ class App extends Component<NonNullable<unknown>, AppState> {
     this.setState({ loading: true });
     this.setState({ error: '' });
 
-    const berriesResponse = await BerriesAPI.getBerries();
+    const pokemonsResponse = await PokemonsAPI.getPokemons();
 
-    if (berriesResponse) {
-      if (typeof berriesResponse === 'string') {
-        this.setState({ error: berriesResponse });
+    if (pokemonsResponse) {
+      if (typeof pokemonsResponse === 'string') {
+        this.setState({ error: pokemonsResponse });
       } else {
-        this.setState({ berries: berriesResponse.results });
+        this.setState({ pokemons: pokemonsResponse.results });
       }
     }
     this.setState({ loading: false });
@@ -42,7 +36,7 @@ class App extends Component<NonNullable<unknown>, AppState> {
   render() {
     let content: JSX.Element;
 
-    const { loading, error, berries } = this.state;
+    const { loading, error, pokemons } = this.state;
 
     switch (true) {
       case loading:
@@ -54,7 +48,7 @@ class App extends Component<NonNullable<unknown>, AppState> {
       default:
         content = (
           <ContainerWrapper>
-            <BerriesList berries={berries} />
+            <BerriesList pokemons={pokemons} />
             <FallbackUIButton />
           </ContainerWrapper>
         );

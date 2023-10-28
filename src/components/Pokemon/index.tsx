@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
-import { BerryProps } from './types/types';
+import { PokemonProps } from './types/types';
 import { Col } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
 
-class Berry extends Component<BerryProps> {
+class Pokemon extends Component<PokemonProps> {
   render() {
     const {
-      berry: { url, name },
+      pokemon: { url, name },
     } = this.props;
 
     return (
       <Col $span={3}>
         <Card>
           <CardHeader>{name}</CardHeader>
-          <CardLink href={url}>To berry</CardLink>
+          <CardLink href={url}>To pokemon</CardLink>
         </Card>
       </Col>
     );
   }
 }
 
-export default Berry;
+export default Pokemon;
