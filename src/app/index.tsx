@@ -24,8 +24,8 @@ class App extends Component<NonNullable<unknown>, AppState> {
     const pokemonsResponse = await PokemonsAPI.getPokemons();
 
     if (pokemonsResponse) {
-      if (typeof pokemonsResponse === 'string') {
-        this.setState({ error: pokemonsResponse });
+      if (pokemonsResponse instanceof Error) {
+        this.setState({ error: pokemonsResponse.message });
       } else {
         this.setState({ pokemons: pokemonsResponse.results });
       }
