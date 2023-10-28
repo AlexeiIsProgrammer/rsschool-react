@@ -1,5 +1,5 @@
-import { OnePokemon } from '../../../API/types/interfaces';
+import { Pokemon } from '../../../API/types/interfaces';
 
 export type PokemonProps = {
-  pokemon: OnePokemon;
+  pokemon: Pokemon;
 };

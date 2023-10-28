@@ -1,7 +1,7 @@
-import { OnePokemon } from '../../API/types/interfaces';
+import { Pokemon } from '../../API/types/interfaces';
 
 export type AppState = {
-  pokemons: OnePokemon[];
+  pokemons: Pokemon[];
   loading: boolean;
   error: string;
 };
