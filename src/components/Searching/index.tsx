@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import PokemonsAPI from '../../API/Pokemons';
-import { PokemonURL } from '../../API/types/interfaces';
 import { PAGINATION_LIMIT } from '../../constants';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
@@ -10,11 +9,12 @@ import PokemonsList from '../PokemonsList';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 import Pagination from '../Pagination';
+import { Context } from '../../context';
 
 function Searching() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [pokemons, setPokemons] = useState<PokemonURL[]>([]);
+  const { pokemons, setPokemons } = useContext(Context);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -42,7 +42,7 @@ function Searching() {
         setError(pokemonsResponse.message);
       } else {
         if (pokemonsResponse.count !== null) setCount(pokemonsResponse.count);
-        setPokemons(pokemonsResponse.results);
+        if (pokemons !== null) setPokemons(pokemonsResponse.results);
       }
     }
 
@@ -63,7 +63,7 @@ function Searching() {
       content = <Alert message="Error !!!" description={error} type="error" />;
       break;
     default:
-      content = <PokemonsList pokemons={pokemons} />;
+      content = <PokemonsList />;
       break;
   }
 

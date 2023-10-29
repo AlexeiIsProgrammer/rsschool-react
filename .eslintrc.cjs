@@ -49,5 +49,7 @@ module.exports = {
     'consistent-return': 'off',
     'react/prefer-stateless-function': 'off',
     'import/prefer-default-export': 'off',
+    'import/no-cycle': 'off',
+    'react/jsx-no-constructed-context-values': 'off',
   },
 };

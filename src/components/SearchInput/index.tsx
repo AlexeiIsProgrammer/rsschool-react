@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button } from '../../styles';
 import { Search, SearchInputWrapper } from './styles';
-import { SearchInputProps } from './types/types';
+import { Context } from '../../context';
 
-export default function SearchInput({ setQuery }: SearchInputProps) {
+export default function SearchInput() {
+  const { setQuery } = useContext(Context);
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
