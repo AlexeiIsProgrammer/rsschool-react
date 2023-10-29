@@ -9,7 +9,7 @@ export const PokemonDetailsWrapper = styled.div<{ $isClosed: boolean }>`
   padding: 16px;
   height: 100vh;
   border-radius: 10px 0px 0px 10px;
-  background-color: lightgreen;
+  background-color: ${(props) => props.theme.colors.lightblack};
   max-width: ${(props) => (props.$isClosed ? '50px' : '300px')};
   transition: 0.5s ease max-width;
   width: 100%;
@@ -37,17 +37,15 @@ export const PokemonDetails = styled.div`
   margin-top: 40px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
 `;
 export const PokemonName = styled.h1`
-  color: #f5f7f8;
+  color: ${(props) => props.theme.colors.white};
   text-align: center;
   font-size: 40px;
 `;
 export const PokemonImage = styled.img`
-  color: #f5f7f8;
-  text-align: center;
   font-size: 30px;
   width: 200px;
   height: 200px;

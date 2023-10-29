@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './app';
-import ErrorBoundary from './components/ErrorBoundary';
 import './index.scss';
 import PokemonPage from './pages/PokemonPage';
 import ErrorPage from './pages/ErrorPage';
+import Theme from './theme';
 
 const router = createBrowserRouter([
   {
@@ -23,8 +23,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ErrorBoundary>
+    <Theme>
       <RouterProvider router={router} />
-    </ErrorBoundary>
+    </Theme>
   </React.StrictMode>
 );

@@ -10,7 +10,7 @@ function Pokemon({ pokemon }: PokemonProps) {
     <ListItem $span={3}>
       <Card>
         <CardHeader>{name}</CardHeader>
-        <CardLink to={`search/${id}?details=1`}>To pokemon</CardLink>
+        <CardLink to={`search/${id}?details=1`}>Open the pokemon</CardLink>
       </Card>
     </ListItem>
   );

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import '../../index.scss';
 
 export const ErrorWrapper = styled.div`
   display: flex;
@@ -7,12 +8,12 @@ export const ErrorWrapper = styled.div`
   justify-content: center;
   height: 100vh;
 
-  background-color: #45474b;
+  background-color: ${(props) => props.theme.colors.black};
 
   gap: 20px;
 `;
 export const ErrorTitle = styled.h1`
-  color: #f5f7f8;
+  color: ${(props) => props.theme.colors.white};
   text-align: center;
   font-size: 40px;
 `;

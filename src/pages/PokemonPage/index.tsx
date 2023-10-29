@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { AiFillCaretLeft, AiFillCloseCircle } from 'react-icons/ai';
 import PokemonsAPI from '../../API/Pokemons';
 import Spinner from '../../components/Spinner';
 import Alert from '../../components/Alert';
@@ -63,21 +64,29 @@ export default function PokemonPage() {
 
   return (
     <PokemonDetailsWrapper $isClosed={isClosed}>
-      {loading ? (
-        <Spinner />
-      ) : (
+      {isClosed && (
+        <PokemonDetailsOpen onClick={openModalHandle}>
+          <AiFillCaretLeft />
+        </PokemonDetailsOpen>
+      )}
+      {!isClosed && (
         <>
-          {isClosed && <PokemonDetailsOpen onClick={openModalHandle}>{'<<'}</PokemonDetailsOpen>}
-          {!isClosed && (
-            <>
-              <PokemonDetailsClose onClick={closeModalHandle}>x</PokemonDetailsClose>
+          <PokemonDetailsClose onClick={closeModalHandle}>
+            <AiFillCloseCircle />
+          </PokemonDetailsClose>
 
-              <PokemonDetails>
-                <PokemonName>{pokemon.name}</PokemonName>
+          <PokemonDetails>
+            {loading ? (
+              <Spinner />
+            ) : (
+              <>
+                <PokemonName>{pokemon.name.toUpperCase()}</PokemonName>
+                <PokemonName>Height: {pokemon.height}</PokemonName>
+                <PokemonName>Weight: {pokemon.weight}</PokemonName>
                 <PokemonImage src={pokemon.sprites.front_default} alt="pokich" />
-              </PokemonDetails>
-            </>
-          )}
+              </>
+            )}
+          </PokemonDetails>
         </>
       )}
     </PokemonDetailsWrapper>

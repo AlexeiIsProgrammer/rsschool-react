@@ -1,28 +1,34 @@
 import { useEffect, useState } from 'react';
 import PokemonsAPI from '../../API/Pokemons';
 import { PokemonURL } from '../../API/types/interfaces';
+import { PAGINATION_LIMIT } from '../../constants';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
 import PokemonsList from '../PokemonsList';
 import Spinner from '../Spinner';
-import { SearchingContainer } from './styles';
+import { SearchingContainer, SearchingSizeContainer } from './styles';
+import Pagination from '../Pagination';
 
 function Searching() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [pokemons, setPokemons] = useState<PokemonURL[]>([]);
 
+  const [page, setPage] = useState(0);
+  const [count, setCount] = useState(10);
+
   const fetchPokemons = async () => {
     setLoading(true);
     setError('');
 
-    const pokemonsResponse = await PokemonsAPI.getPokemons();
+    const pokemonsResponse = await PokemonsAPI.getPokemons(PAGINATION_LIMIT, page);
 
     if (pokemonsResponse) {
       if (pokemonsResponse instanceof Error) {
         setError(pokemonsResponse.message);
       } else {
+        if (pokemonsResponse.count !== null) setCount(pokemonsResponse.count);
         setPokemons(pokemonsResponse.results);
       }
     }
@@ -32,7 +38,7 @@ function Searching() {
 
   useEffect(() => {
     fetchPokemons();
-  }, []);
+  }, [page]);
 
   let content: JSX.Element;
 
@@ -44,16 +50,19 @@ function Searching() {
       content = <Alert message="Error !!!" description={error} type="error" />;
       break;
     default:
-      content = (
-        <ContainerWrapper>
-          <PokemonsList pokemons={pokemons} />
-          <FallbackUIButton />
-        </ContainerWrapper>
-      );
+      content = <PokemonsList pokemons={pokemons} />;
       break;
   }
 
-  return <SearchingContainer>{content}</SearchingContainer>;
+  return (
+    <SearchingContainer>
+      <ContainerWrapper>
+        <SearchingSizeContainer>{content}</SearchingSizeContainer>
+        <Pagination setPage={setPage} page={page} count={count} />
+        <FallbackUIButton />
+      </ContainerWrapper>
+    </SearchingContainer>
+  );
 }
 
 export default Searching;
