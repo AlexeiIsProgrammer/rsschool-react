@@ -1,62 +1,58 @@
-import { Component } from 'react';
-import PokemonsList from '../components/PokemonsList';
-import FallbackUIButton from '../components/FallbackUIButton';
-import Spinner from '../components/Spinner';
-import Alert from '../components/Alert';
-import { ContainerWrapper } from '../styles';
+import { useEffect, useState } from 'react';
 import PokemonsAPI from '../API/Pokemons';
-import { AppState } from './types/types';
+import Alert from '../components/Alert';
+import FallbackUIButton from '../components/FallbackUIButton';
+import PokemonsList from '../components/PokemonsList';
+import Spinner from '../components/Spinner';
+import { ContainerWrapper } from '../styles';
+import { Pokemon } from '../API/types/interfaces';
 
-class App extends Component<NonNullable<unknown>, AppState> {
-  constructor(props: NonNullable<unknown>) {
-    super(props);
-    this.state = { loading: false, error: '', pokemons: [] };
-  }
+function App() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
 
-  componentDidMount(): void {
-    this.fetchPokemons();
-  }
-
-  fetchPokemons = async () => {
-    this.setState({ loading: true });
-    this.setState({ error: '' });
+  const fetchPokemons = async () => {
+    setLoading(true);
+    setError('');
 
     const pokemonsResponse = await PokemonsAPI.getPokemons();
 
     if (pokemonsResponse) {
       if (pokemonsResponse instanceof Error) {
-        this.setState({ error: pokemonsResponse.message });
+        setError(pokemonsResponse.message);
       } else {
-        this.setState({ pokemons: pokemonsResponse.results });
+        setPokemons(pokemonsResponse.results);
       }
     }
-    this.setState({ loading: false });
+
+    setLoading(false);
   };
 
-  render() {
-    let content: JSX.Element;
+  useEffect(() => {
+    fetchPokemons();
+  }, []);
 
-    const { loading, error, pokemons } = this.state;
+  let content: JSX.Element;
 
-    switch (true) {
-      case loading:
-        content = <Spinner />;
-        break;
-      case error !== '':
-        content = <Alert message="Error !!!" description={error} type="error" />;
-        break;
-      default:
-        content = (
-          <ContainerWrapper>
-            <PokemonsList pokemons={pokemons} />
-            <FallbackUIButton />
-          </ContainerWrapper>
-        );
-        break;
-    }
-
-    return content;
+  switch (true) {
+    case loading:
+      content = <Spinner />;
+      break;
+    case error !== '':
+      content = <Alert message="Error !!!" description={error} type="error" />;
+      break;
+    default:
+      content = (
+        <ContainerWrapper>
+          <PokemonsList pokemons={pokemons} />
+          <FallbackUIButton />
+        </ContainerWrapper>
+      );
+      break;
   }
+
+  return content;
 }
 
 export default App;

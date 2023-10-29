@@ -1,31 +1,19 @@
-import React, { Component } from 'react';
-
-import { FallbackUIButtonState } from './types/types';
+import React, { useState } from 'react';
 import { Button } from '../../styles';
 
-export default class FallbackUIButton extends Component<
-  NonNullable<unknown>,
-  FallbackUIButtonState
-> {
-  constructor(props: NonNullable<unknown>) {
-    super(props);
-    this.state = { isError: false };
+export default function FallbackUIButton() {
+  const [isError, setIsError] = useState<boolean>(false);
+
+  let content: JSX.Element;
+
+  switch (true) {
+    case isError:
+      throw new Error('Test error throwing');
+
+    default:
+      content = <Button onClick={() => setIsError(true)}>Get an error</Button>;
+      break;
   }
 
-  render() {
-    const { isError } = this.state;
-
-    let content: JSX.Element;
-
-    switch (true) {
-      case isError:
-        throw new Error('Test error throwing');
-
-      default:
-        content = <Button onClick={() => this.setState({ isError: true })}>Get an error</Button>;
-        break;
-    }
-
-    return content;
-  }
+  return content;
 }

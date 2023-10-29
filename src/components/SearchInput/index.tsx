@@ -1,57 +1,33 @@
-import React, { Component } from 'react';
-import { Search, SearchInputWrapper } from './styles';
+import { useEffect, useState } from 'react';
 import { Button } from '../../styles';
+import { Search, SearchInputWrapper } from './styles';
+import { SearchInputProps } from './types/types';
 
-type SearchInputState = {
-  inputValue: string;
-};
+export default function SearchInput({ setQuery }: SearchInputProps) {
+  const [inputValue, setInputValue] = useState('');
 
-type SearchInputProps = {
-  setQuery: (val: string) => void;
-};
-
-export default class SearchInput extends Component<SearchInputProps, SearchInputState> {
-  constructor(props: SearchInputProps) {
-    super(props);
-    this.state = { inputValue: '' };
-  }
-
-  componentDidMount(): void {
+  useEffect(() => {
     const localQuery = localStorage.getItem('query');
 
     if (localQuery) {
-      const { setQuery } = this.props;
-      this.setState({ inputValue: localQuery });
+      setInputValue(localQuery);
       setQuery(localQuery);
     }
-  }
+  }, []);
 
-  toLocalStorage = () => {
-    const { inputValue } = this.state;
-
+  const onSearch = () => {
+    setQuery(inputValue);
     localStorage.setItem('query', inputValue);
   };
 
-  onSearch = () => {
-    const { setQuery } = this.props;
-    const { inputValue } = this.state;
-
-    setQuery(inputValue);
-    this.toLocalStorage();
-  };
-
-  render() {
-    const { inputValue } = this.state;
-
-    return (
-      <SearchInputWrapper>
-        <Search
-          placeholder="Search your Pokemon"
-          onChange={(e) => this.setState({ inputValue: e.target.value })}
-          value={inputValue}
-        />
-        <Button onClick={this.onSearch}>Search</Button>
-      </SearchInputWrapper>
-    );
-  }
+  return (
+    <SearchInputWrapper>
+      <Search
+        placeholder="Search your Pokemon"
+        onChange={(e) => setInputValue(e.target.value)}
+        value={inputValue}
+      />
+      <Button onClick={onSearch}>Search</Button>
+    </SearchInputWrapper>
+  );
 }
