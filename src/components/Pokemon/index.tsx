@@ -1,7 +1,6 @@
-import React from 'react';
-import { PokemonProps } from './types/types';
 import { ListItem } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
+import { PokemonProps } from './types/types';
 
 function Pokemon({ pokemon }: PokemonProps) {
   const { url, name } = pokemon;
@@ -11,7 +10,7 @@ function Pokemon({ pokemon }: PokemonProps) {
     <ListItem $span={3}>
       <Card>
         <CardHeader>{name}</CardHeader>
-        <CardLink to={`search/${id}`}>To pokemon</CardLink>
+        <CardLink to={`search/${id}?details=1`}>To pokemon</CardLink>
       </Card>
     </ListItem>
   );

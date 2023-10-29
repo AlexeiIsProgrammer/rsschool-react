@@ -1,0 +1,54 @@
+import styled from 'styled-components';
+
+export const PokemonDetailsWrapper = styled.div<{ $isClosed: boolean }>`
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  bottom: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  height: 100vh;
+  border-radius: 10px 0px 0px 10px;
+  background-color: lightgreen;
+  max-width: ${(props) => (props.$isClosed ? '50px' : '300px')};
+  transition: 0.5s ease max-width;
+  width: 100%;
+`;
+
+export const PokemonDetailsClose = styled.span`
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+`;
+
+export const PokemonDetailsOpen = styled.span`
+  cursor: pointer;
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 10px;
+
+  transform: translateY(-50%);
+`;
+
+export const PokemonDetails = styled.div`
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+`;
+export const PokemonName = styled.h1`
+  color: #f5f7f8;
+  text-align: center;
+  font-size: 40px;
+`;
+export const PokemonImage = styled.img`
+  color: #f5f7f8;
+  text-align: center;
+  font-size: 30px;
+  width: 200px;
+  height: 200px;
+`;
