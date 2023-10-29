@@ -15,21 +15,23 @@ export const Button = styled.button`
   }
 `;
 
-export const Row = styled.div`
+export const SearchingList = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex: 1 0 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   row-gap: 16px;
   column-gap: 24px;
 `;
 
-export const Col = styled.div<{ $span: number }>`
-  width: calc(${(props) => (props.$span * 100) / 12}% - 24px);
-`;
+// width: calc(${(props) => (props.$span * 100) / 12}% - 24px);
+
+export const ListItem = styled.div<{ $span: number }>``;
 
 export const ContainerWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
 `;

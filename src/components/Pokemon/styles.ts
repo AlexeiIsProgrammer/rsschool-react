@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 export const Card = styled.div`
@@ -19,7 +20,7 @@ export const CardHeader = styled.span`
   padding: 5px;
   border-radius: 10px 10px 0px 0px;
 `;
-export const CardLink = styled.a`
+export const CardLink = styled(Link)`
   text-align: center;
   width: 100%;
   display: inline-block;

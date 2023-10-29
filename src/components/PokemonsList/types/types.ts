@@ -1,5 +1,5 @@
-import { Pokemon } from '../../../API/types/interfaces';
+import { PokemonURL } from '../../../API/types/interfaces';
 
 export type PokemonsListProps = {
-  pokemons: Pokemon[];
+  pokemons: PokemonURL[];
 };
