@@ -1,13 +1,13 @@
-import React from 'react';
-import PaginationProps from './types/types';
+import { PAGINATION_LIMIT } from '../../constants';
 import { Button } from '../../styles';
 import { PaginationCounter, PaginationWrapper } from './styles';
-import { PAGINATION_LIMIT } from '../../constants';
+import PaginationProps from './types/types';
 
 export default function Pagination({ count, page, setPage }: PaginationProps) {
   const prevPageHandle = () => {
     setPage(page - 1);
   };
+
   const nextPageHandle = () => {
     setPage(page + 1);
   };

@@ -45,11 +45,13 @@ export default function PokemonPage() {
   }, [pokemonId]);
 
   const closeModalHandle = () => {
-    setSearchParams({ details: '0' });
+    searchParams.set('details', '0');
+    setSearchParams(searchParams);
   };
 
   const openModalHandle = () => {
-    setSearchParams({ details: '1' });
+    searchParams.set('details', '1');
+    setSearchParams(searchParams);
   };
 
   if (error) {

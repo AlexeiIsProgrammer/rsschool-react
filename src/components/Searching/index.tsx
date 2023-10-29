@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import PokemonsAPI from '../../API/Pokemons';
 import { PokemonURL } from '../../API/types/interfaces';
 import { PAGINATION_LIMIT } from '../../constants';
@@ -15,14 +16,26 @@ function Searching() {
   const [error, setError] = useState<string>('');
   const [pokemons, setPokemons] = useState<PokemonURL[]>([]);
 
-  const [page, setPage] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageParam = +(searchParams.get('page') || 1) - 1;
+
+  const [page, setPage] = useState(pageParam);
   const [count, setCount] = useState(10);
+
+  useEffect(() => {
+    searchParams.set('page', (page + 1).toString());
+    setSearchParams(searchParams);
+  }, [page]);
 
   const fetchPokemons = async () => {
     setLoading(true);
     setError('');
 
-    const pokemonsResponse = await PokemonsAPI.getPokemons(PAGINATION_LIMIT, page);
+    const pokemonsResponse = await PokemonsAPI.getPokemons(
+      PAGINATION_LIMIT,
+      page * PAGINATION_LIMIT
+    );
 
     if (pokemonsResponse) {
       if (pokemonsResponse instanceof Error) {
