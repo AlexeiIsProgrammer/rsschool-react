@@ -19,9 +19,11 @@ export default function PokemonsList() {
     <ContainerWrapper>
       <SearchInput />
       <SearchingList>
-        {searchedPokemons.map((pokemon) => (
-          <Pokemon key={pokemon.name} pokemon={pokemon} />
-        ))}
+        {searchedPokemons.length === 0 ? (
+          <h1>There are no items</h1>
+        ) : (
+          searchedPokemons.map((pokemon) => <Pokemon key={pokemon.name} pokemon={pokemon} />)
+        )}
       </SearchingList>
     </ContainerWrapper>
   );
