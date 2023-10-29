@@ -8,7 +8,7 @@ function App() {
     <ErrorBoundary>
       <Searching />
       <Welcome>
-        Welcome <br /> to this <br /> page
+        Welcome <br /> to this <br /> PokeProject
       </Welcome>
       <Outlet />
     </ErrorBoundary>

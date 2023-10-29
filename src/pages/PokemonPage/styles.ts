@@ -8,9 +8,8 @@ export const PokemonDetailsWrapper = styled.div<{ $isClosed: boolean }>`
   box-sizing: border-box;
   padding: 16px;
   height: 100vh;
-  border-radius: 10px 0px 0px 10px;
   background-color: ${(props) => props.theme.colors.lightblack};
-  max-width: ${(props) => (props.$isClosed ? '50px' : '300px')};
+  max-width: ${(props) => (props.$isClosed ? '50px' : 'calc(100vw - 400px)')};
   transition: 0.5s ease max-width;
   width: 100%;
 `;

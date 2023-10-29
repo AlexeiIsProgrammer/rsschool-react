@@ -4,7 +4,6 @@ export const SearchingContainer = styled.div`
   position: relative;
   box-sizing: border-box;
   height: 100vh;
-  border-radius: 0px 10px 10px 0px;
   background-color: ${(props) => props.theme.colors.lightblack};
   padding: 16px;
 

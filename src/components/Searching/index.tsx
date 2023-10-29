@@ -68,7 +68,14 @@ function Searching() {
   }
 
   return (
-    <SearchingContainer>
+    <SearchingContainer
+      onClick={() => {
+        if (searchParams.get('details') && searchParams.get('details') === '1') {
+          searchParams.set('details', '0');
+          setSearchParams(searchParams);
+        }
+      }}
+    >
       <ContainerWrapper>
         <SearchingSizeContainer>{content}</SearchingSizeContainer>
         <Pagination setPage={setPage} page={page} count={count} />
