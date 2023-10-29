@@ -20,7 +20,16 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     const { children } = this.props;
     const { hasError, error, errorInfo } = this.state;
     if (hasError) {
-      return <Alert message={error} description={errorInfo} type="error" />;
+      return (
+        <>
+          <Alert message={error} description={errorInfo} type="error" />
+          <Alert
+            message="Guess, it can be an additional UI, right?"
+            description="There are some UI's to show you how can I manipulate these methods 😛😛😛"
+            type="info"
+          />
+        </>
+      );
     }
 
     return children;
