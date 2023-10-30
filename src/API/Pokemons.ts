@@ -4,15 +4,11 @@ import { Pokemon, PokemonsResponse } from './types/interfaces';
 export default class PokemonsAPI {
   private static baseURL = 'https://pokeapi.co/api/v2/pokemon/';
 
-  static async getPokemons(
-    limit: number,
-    offset: number
-  ): Promise<PokemonsResponse | Error | undefined> {
+  static async getPokemons(limit: number = 1000): Promise<PokemonsResponse | Error | undefined> {
     try {
       const response = await axios.get(this.baseURL, {
         params: {
           limit,
-          offset,
         },
       });
       return response.data;
