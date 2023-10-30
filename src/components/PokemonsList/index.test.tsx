@@ -21,7 +21,7 @@ describe('App', () => {
       </Theme>
     );
 
-    const expectedText = 'There are no items';
+    const expectedText = 'Array is empty';
 
     const value = screen.getByText(expectedText);
 
