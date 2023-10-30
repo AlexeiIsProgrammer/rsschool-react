@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { SpinnerWrapper } from './styles';
 
-export default function Spinner() {
-  return <SpinnerWrapper />;
+export default class Spinner extends Component {
+  render() {
+    return <SpinnerWrapper />;
+  }
 }
