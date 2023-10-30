@@ -10,7 +10,7 @@ export default function SearchInput() {
   useEffect(() => {
     const localQuery = localStorage.getItem('query');
 
-    if (localQuery) {
+    if (localQuery !== null) {
       setInputValue(localQuery);
       setQuery(localQuery);
     }
@@ -18,6 +18,7 @@ export default function SearchInput() {
 
   const onSearch = () => {
     setQuery(inputValue);
+
     localStorage.setItem('query', inputValue);
   };
 

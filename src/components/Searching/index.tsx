@@ -19,7 +19,7 @@ import SearchInput from '../SearchInput';
 function Searching() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const { pokemons, setPokemons } = useContext(Context);
+  const { pokemons, setPokemons, query, setQuery } = useContext(Context);
 
   const [requestedPokemons, setRequestedPokemons] = useState<PokemonURL[]>([]);
 
@@ -28,8 +28,6 @@ function Searching() {
   const pageParam = +(searchParams.get('page') || 1) - 1;
 
   const [page, setPage] = useState(pageParam);
-
-  const [query, setQuery] = useState<string>('');
 
   const fetchPokemons = async () => {
     setLoading(true);
@@ -45,9 +43,14 @@ function Searching() {
 
         const localQuery = localStorage.getItem('query');
 
-        if (localQuery) {
+        if (localQuery !== null) {
           setQuery(localQuery);
-          setPokemons(searchPokemons(localQuery, pokemonsResponse.results));
+          setPokemons(
+            searchPokemons(localQuery, pokemonsResponse.results).slice(
+              page * PAGINATION_LIMIT,
+              page * PAGINATION_LIMIT + PAGINATION_LIMIT
+            )
+          );
         }
       }
     }
@@ -65,9 +68,16 @@ function Searching() {
   }, [page]);
 
   useEffect(() => {
-    setPokemons(searchPokemons(query, pokemons));
     setPage(0);
   }, [query]);
+  useEffect(() => {
+    setPokemons(
+      searchPokemons(query, requestedPokemons).slice(
+        page * PAGINATION_LIMIT,
+        page * PAGINATION_LIMIT + PAGINATION_LIMIT
+      )
+    );
+  }, [query, page]);
 
   let content: JSX.Element;
 
@@ -98,7 +108,11 @@ function Searching() {
       <ContainerWrapper>
         <SearchInput />
         <SearchingSizeContainer>{content}</SearchingSizeContainer>
-        <Pagination setPage={setPage} page={page} count={pokemons.length} />
+        <Pagination
+          setPage={setPage}
+          page={page}
+          count={searchPokemons(query, requestedPokemons).length}
+        />
         <FallbackUIButton />
       </ContainerWrapper>
     </SearchingContainer>
