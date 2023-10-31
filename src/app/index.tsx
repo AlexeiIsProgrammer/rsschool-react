@@ -1,39 +1,34 @@
 import { Component } from 'react';
-import BerriesAPI from '../API/Berries';
-import BerriesList from '../components/BerriesList';
-import { OneBerry } from '../API/types/interfaces';
+import PokemonsList from '../components/PokemonsList';
 import FallbackUIButton from '../components/FallbackUIButton';
 import Spinner from '../components/Spinner';
 import Alert from '../components/Alert';
 import { ContainerWrapper } from '../styles';
-
-type AppState = {
-  berries: OneBerry[];
-  loading: boolean;
-  error: string;
-};
+import PokemonsAPI from '../API/Pokemons';
+import { AppState } from './types/types';
+import SearchInput from '../components/SearchInput';
 
 class App extends Component<NonNullable<unknown>, AppState> {
   constructor(props: NonNullable<unknown>) {
     super(props);
-    this.state = { loading: false, error: '', berries: [] };
+    this.state = { loading: false, error: '', pokemons: [], query: '' };
   }
 
   componentDidMount(): void {
-    this.fetchBerries();
+    this.fetchPokemons();
   }
 
-  fetchBerries = async () => {
+  fetchPokemons = async () => {
     this.setState({ loading: true });
     this.setState({ error: '' });
 
-    const berriesResponse = await BerriesAPI.getBerries();
+    const pokemonsResponse = await PokemonsAPI.getPokemons();
 
-    if (berriesResponse) {
-      if (typeof berriesResponse === 'string') {
-        this.setState({ error: berriesResponse });
+    if (pokemonsResponse) {
+      if (pokemonsResponse instanceof Error) {
+        this.setState({ error: pokemonsResponse.message });
       } else {
-        this.setState({ berries: berriesResponse.results });
+        this.setState({ pokemons: pokemonsResponse.results });
       }
     }
     this.setState({ loading: false });
@@ -42,7 +37,7 @@ class App extends Component<NonNullable<unknown>, AppState> {
   render() {
     let content: JSX.Element;
 
-    const { loading, error, berries } = this.state;
+    const { loading, error, pokemons, query } = this.state;
 
     switch (true) {
       case loading:
@@ -54,7 +49,8 @@ class App extends Component<NonNullable<unknown>, AppState> {
       default:
         content = (
           <ContainerWrapper>
-            <BerriesList berries={berries} />
+            <SearchInput setQuery={(val: string) => this.setState({ query: val })} />
+            <PokemonsList pokemons={pokemons} query={query} />
             <FallbackUIButton />
           </ContainerWrapper>
         );

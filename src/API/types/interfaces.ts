@@ -1,18 +1,18 @@
-export interface BerriesResponse {
+export interface PokemonsResponse {
   count: null | number;
   next: string;
   previous: null | number;
-  results: OneBerry[];
+  results: Pokemon[];
 }
 
-export interface BerryResponse {
+export interface PokemonResponse {
   count: null | number;
   next: string;
   previous: null | number;
-  results: OneBerry[];
+  results: Pokemon[];
 }
 
-export type OneBerry = {
+export type Pokemon = {
   url: string;
   name: string;
 };

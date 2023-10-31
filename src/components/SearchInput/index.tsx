@@ -46,7 +46,7 @@ export default class SearchInput extends Component<SearchInputProps, SearchInput
     return (
       <SearchInputWrapper>
         <Search
-          placeholder="Search your Berry"
+          placeholder="Search your Pokemon"
           onChange={(e) => this.setState({ inputValue: e.target.value })}
           value={inputValue}
         />
