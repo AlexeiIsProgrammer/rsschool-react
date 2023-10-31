@@ -1,25 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import PokemonsList from '.';
-import Theme from '../../theme';
-import { Context } from '../../context';
+import { renderWithProviders } from '../../test';
 
 describe('App', () => {
   it('should render message about empty array', () => {
-    render(
-      <Theme>
-        <Context.Provider
-          value={{
-            pokemons: [],
-            query: '',
-            setQuery: () => {},
-            setPokemons: () => {},
-          }}
-        >
-          <PokemonsList />
-        </Context.Provider>
-      </Theme>
-    );
+    renderWithProviders(<PokemonsList />);
 
     const expectedText = 'Array is empty';
 
@@ -28,10 +14,6 @@ describe('App', () => {
     expect(value).toHaveTextContent(expectedText);
   });
   it('should render cards', () => {
-    render(
-      <Theme>
-        <PokemonsList />
-      </Theme>
-    );
+    renderWithProviders(<PokemonsList />);
   });
 });

@@ -1,9 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import PokemonsAPI from '../../API/Pokemons';
 
-import { PokemonURL } from '../../API/types/interfaces';
-import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
@@ -13,54 +10,37 @@ import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 
 import { PAGINATION_LIMIT } from '../../constants';
+import pokemonApi from '../../services/PokemonAPI';
 import searchPokemons from '../../utils/sort';
 import SearchInput from '../SearchInput';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { searchSelector } from '../../store/selectors/SearchSelector';
+import { setPageItems } from '../../store/slices/SearchSlice';
 
 function Searching() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const { pokemons, setPokemons, query, setQuery } = useContext(Context);
+  const dispatch = useAppDispatch();
+  const { query, itemsPerPage } = useAppSelector(searchSelector);
 
-  const [requestedPokemons, setRequestedPokemons] = useState<PokemonURL[]>([]);
+  const { data, isLoading, error } = pokemonApi.useGetPokemonsQuery({});
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageParam = +(searchParams.get('page') || 1) - 1;
-
   const [page, setPage] = useState(pageParam);
 
-  const fetchPokemons = async () => {
-    setLoading(true);
-    setError('');
-
-    const pokemonsResponse = await PokemonsAPI.getPokemons();
-
-    if (pokemonsResponse) {
-      if (pokemonsResponse instanceof Error) {
-        setError(pokemonsResponse.message);
-      } else {
-        setRequestedPokemons(pokemonsResponse.results);
-
-        const localQuery = localStorage.getItem('query');
-
-        if (localQuery !== null) {
-          setQuery(localQuery);
-          setPokemons(
-            searchPokemons(localQuery, pokemonsResponse.results).slice(
-              page * PAGINATION_LIMIT,
-              page * PAGINATION_LIMIT + PAGINATION_LIMIT
-            )
-          );
-        }
-      }
-    }
-
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchPokemons();
-  }, []);
+    if (data) {
+      dispatch(
+        setPageItems({
+          query,
+          itemsPerPage: searchPokemons(query, data.results).slice(
+            page * PAGINATION_LIMIT,
+            page * PAGINATION_LIMIT + PAGINATION_LIMIT
+          ),
+        })
+      );
+    }
+  }, [data]);
 
   useEffect(() => {
     searchParams.set('page', (page + 1).toString());
@@ -70,25 +50,29 @@ function Searching() {
   useEffect(() => {
     setPage(0);
   }, [query]);
+
   useEffect(() => {
-    setPokemons(
-      searchPokemons(query, requestedPokemons).slice(
-        page * PAGINATION_LIMIT,
-        page * PAGINATION_LIMIT + PAGINATION_LIMIT
-      )
+    dispatch(
+      setPageItems({
+        query,
+        itemsPerPage: searchPokemons(query, data?.results || []).slice(
+          page * PAGINATION_LIMIT,
+          page * PAGINATION_LIMIT + PAGINATION_LIMIT
+        ),
+      })
     );
   }, [query, page]);
 
   let content: JSX.Element;
 
   switch (true) {
-    case loading:
+    case isLoading:
       content = <Spinner />;
       break;
-    case error !== '':
-      content = <Alert message="Error !!!" description={error} type="error" />;
+    case error !== undefined:
+      content = <Alert message="Error !!!" description={error?.toString() || ''} type="error" />;
       break;
-    case pokemons.length === 0:
+    case itemsPerPage.length === 0:
       content = <Alert message="Array is empty" description="Find something else.." type="info" />;
       break;
     default:
@@ -111,7 +95,7 @@ function Searching() {
         <Pagination
           setPage={setPage}
           page={page}
-          count={searchPokemons(query, requestedPokemons).length}
+          count={searchPokemons(query, data?.results || []).length}
         />
         <FallbackUIButton />
       </ContainerWrapper>
