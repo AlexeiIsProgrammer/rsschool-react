@@ -4,4 +4,5 @@ export type AppState = {
   pokemons: Pokemon[];
   loading: boolean;
   error: string;
+  query: string;
 };

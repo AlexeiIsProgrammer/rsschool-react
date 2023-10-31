@@ -6,11 +6,12 @@ import Alert from '../components/Alert';
 import { ContainerWrapper } from '../styles';
 import PokemonsAPI from '../API/Pokemons';
 import { AppState } from './types/types';
+import SearchInput from '../components/SearchInput';
 
 class App extends Component<NonNullable<unknown>, AppState> {
   constructor(props: NonNullable<unknown>) {
     super(props);
-    this.state = { loading: false, error: '', pokemons: [] };
+    this.state = { loading: false, error: '', pokemons: [], query: '' };
   }
 
   componentDidMount(): void {
@@ -36,7 +37,7 @@ class App extends Component<NonNullable<unknown>, AppState> {
   render() {
     let content: JSX.Element;
 
-    const { loading, error, pokemons } = this.state;
+    const { loading, error, pokemons, query } = this.state;
 
     switch (true) {
       case loading:
@@ -48,7 +49,8 @@ class App extends Component<NonNullable<unknown>, AppState> {
       default:
         content = (
           <ContainerWrapper>
-            <PokemonsList pokemons={pokemons} />
+            <SearchInput setQuery={(val: string) => this.setState({ query: val })} />
+            <PokemonsList pokemons={pokemons} query={query} />
             <FallbackUIButton />
           </ContainerWrapper>
         );
