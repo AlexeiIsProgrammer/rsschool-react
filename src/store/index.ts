@@ -10,7 +10,7 @@ import {
   persistStore,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import pokemonApi from '../services/PokemonAPI';
+import { pokemonApi } from '../services/PokemonAPI';
 import searchReducer from './slices/SearchSlice';
 
 const rootReducer = combineReducers({

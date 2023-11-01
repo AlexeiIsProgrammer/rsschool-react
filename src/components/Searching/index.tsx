@@ -10,7 +10,7 @@ import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 
 import { PAGINATION_LIMIT } from '../../constants';
-import pokemonApi from '../../services/PokemonAPI';
+import { useGetPokemonsQuery } from '../../services/PokemonAPI';
 import searchPokemons from '../../utils/sort';
 import SearchInput from '../SearchInput';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -21,7 +21,7 @@ function Searching() {
   const dispatch = useAppDispatch();
   const { query, itemsPerPage } = useAppSelector(searchSelector);
 
-  const { data, isLoading, error } = pokemonApi.useGetPokemonsQuery({});
+  const { data, isLoading, error } = useGetPokemonsQuery({});
 
   const [searchParams, setSearchParams] = useSearchParams();
 

@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { AiFillCaretLeft, AiFillCloseCircle } from 'react-icons/ai';
-import PokemonsAPI from '../../API/Pokemons';
 import Spinner from '../../components/Spinner';
 import Alert from '../../components/Alert';
-import { Pokemon } from '../../API/types/interfaces';
 import {
   PokemonDetails,
   PokemonDetailsClose,
@@ -13,36 +10,17 @@ import {
   PokemonImage,
   PokemonName,
 } from './styles';
+import { useGetPokemonQuery } from '../../services/PokemonAPI';
 
 export default function PokemonPage() {
-  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
   const { pokemonId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const { data, isLoading, error } = useGetPokemonQuery({
+    id: pokemonId || '',
+  });
+
   const isClosed = searchParams.get('details') === '0' || searchParams.get('details') === null;
-
-  const fetchPokemon = async () => {
-    setLoading(true);
-    setError('');
-
-    const pokemonsResponse = await PokemonsAPI.getOnePokemon(pokemonId || '');
-
-    if (pokemonsResponse) {
-      if (pokemonsResponse instanceof Error) {
-        setError(pokemonsResponse.message);
-      } else {
-        setPokemon(pokemonsResponse);
-      }
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchPokemon();
-  }, [pokemonId]);
 
   const closeModalHandle = () => {
     searchParams.set('details', '0');
@@ -55,10 +33,10 @@ export default function PokemonPage() {
   };
 
   if (error) {
-    return <Alert type="error" message={error} description={error} />;
+    return <Alert type="error" message={error.toString()} description={error.toString()} />;
   }
 
-  if (pokemon === null) {
+  if (data === undefined) {
     return (
       <Alert type="error" message="Pokemon is not exists" description="Where is your pokemon?" />
     );
@@ -78,14 +56,14 @@ export default function PokemonPage() {
           </PokemonDetailsClose>
 
           <PokemonDetails>
-            {loading ? (
+            {isLoading ? (
               <Spinner />
             ) : (
               <>
-                <PokemonName>{pokemon.name.toUpperCase()}</PokemonName>
-                <PokemonName>Height: {pokemon.height}</PokemonName>
-                <PokemonName>Weight: {pokemon.weight}</PokemonName>
-                <PokemonImage src={pokemon.sprites.front_default} alt="pokich" />
+                <PokemonName>{data.name.toUpperCase()}</PokemonName>
+                <PokemonName>Height: {data.height}</PokemonName>
+                <PokemonName>Weight: {data.weight}</PokemonName>
+                <PokemonImage src={data.sprites.front_default} alt="pokich" />
               </>
             )}
           </PokemonDetails>

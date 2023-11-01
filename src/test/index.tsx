@@ -1,10 +1,11 @@
-import { Provider } from 'react-redux';
-import { RenderOptions, render, renderHook } from '@testing-library/react';
 import { PreloadedState } from '@reduxjs/toolkit';
-import { PersistGate } from 'redux-persist/integration/react';
+import { RenderOptions, render, renderHook } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
+import type { AppStore, RootState } from '../store';
 import { persistor, setupStore } from '../store';
-import type { RootState, AppStore } from '../store';
 import Theme from '../theme';
 
 const defaultState: PreloadedState<RootState> = {
@@ -13,7 +14,7 @@ const defaultState: PreloadedState<RootState> = {
     query: '',
     viewMode: '0',
     isLoading: false,
-    error: new Error('Preload Error'),
+    error: '',
   },
 };
 
@@ -34,7 +35,9 @@ export function renderWithProviders(
     return (
       <Theme>
         <Provider store={store}>
-          <PersistGate persistor={persistor}>{children}</PersistGate>
+          <PersistGate persistor={persistor}>
+            <MemoryRouter>{children}</MemoryRouter>
+          </PersistGate>
         </Provider>
       </Theme>
     );
@@ -55,7 +58,9 @@ export function renderHookWithProviders<Result, Props = undefined>(
     return (
       <Theme>
         <Provider store={store}>
-          <PersistGate persistor={persistor}>{children}</PersistGate>
+          <PersistGate persistor={persistor}>
+            <MemoryRouter>{children}</MemoryRouter>
+          </PersistGate>
         </Provider>
       </Theme>
     );

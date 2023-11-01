@@ -1,10 +1,12 @@
-import { render } from '@testing-library/react';
-import { describe, it, vi } from 'vitest';
+import { beforeEach, describe, it, vi } from 'vitest';
 
 import { useState } from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import Theme from '../../theme';
 import Searching from '.';
+import { renderWithProviders } from '../../test';
+
+import { useGetPokemonsQuery } from '../../services/PokemonAPI';
+
+vi.mock('../../services/PokemonAPI');
 
 let mockSearchParam = '';
 
@@ -26,18 +28,32 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-function Wrapper() {
-  return (
-    <Theme>
-      <MemoryRouter>
-        <Searching />
-      </MemoryRouter>
-    </Theme>
-  );
-}
-
 describe('Searching', () => {
+  beforeEach(() => {
+    useGetPokemonsQuery.mockClear();
+  });
+
   it('should render Searching', async () => {
-    render(<Wrapper />);
+    const mockData = {
+      count: null,
+      next: '',
+      previous: null,
+      results: [
+        {
+          name: 'Bulbasaur',
+          url: '',
+        },
+      ],
+    };
+
+    useGetPokemonsQuery.mockReturnValueOnce({
+      data: mockData,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+      error: null,
+    });
+
+    renderWithProviders(<Searching />);
   });
 });

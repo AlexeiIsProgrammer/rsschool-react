@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { SearchState } from './types/interfaces';
-import { PokemonURL } from '../../../API/types/interfaces';
+import { pokemonApi } from '../../../services/PokemonAPI';
+import { PAGINATION_LIMIT } from '../../../constants';
+import { PokemonURL } from '../../../services/PokemonAPI/types/interfaces';
 
 const initialState: SearchState = {
   query: '',
@@ -31,6 +33,11 @@ export const searchSlice = createSlice({
         state.itemsPerPage = action.payload.itemsPerPage;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(pokemonApi.endpoints.getPokemons.matchFulfilled, (state, { payload }) => {
+      state.itemsPerPage = payload.results.slice(0, PAGINATION_LIMIT);
+    });
   },
 });
 

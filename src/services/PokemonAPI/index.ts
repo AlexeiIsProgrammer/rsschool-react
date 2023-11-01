@@ -1,8 +1,8 @@
 import { REHYDRATE } from 'redux-persist';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; // Define a service using a base URL and expected endpoints
-import { GetPokemonsArgs, PokemonsResponse } from './types/interfaces';
+import { GetPokemonArgs, GetPokemonsArgs, Pokemon, PokemonsResponse } from './types/interfaces';
 
-const pokemonApi = createApi({
+export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   extractRehydrationInfo(action, { reducerPath }) {
@@ -13,7 +13,6 @@ const pokemonApi = createApi({
       return action.payload;
     }
   },
-
   endpoints: (builder) => ({
     getPokemons: builder.query<PokemonsResponse, GetPokemonsArgs>({
       query: ({ limit = 1000 }) => ({
@@ -23,7 +22,12 @@ const pokemonApi = createApi({
         },
       }),
     }),
+    getPokemon: builder.query<Pokemon, GetPokemonArgs>({
+      query: ({ id }) => ({
+        url: `pokemon/${id}`,
+      }),
+    }),
   }),
 });
 
-export default pokemonApi;
+export const { useGetPokemonsQuery, useGetPokemonQuery } = pokemonApi;
