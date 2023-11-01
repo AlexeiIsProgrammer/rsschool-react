@@ -7,4 +7,5 @@ export const Welcome = styled.h1`
   transform: translate(-50%, -50%);
   font-size: 100px;
   text-align: center;
+  z-index: -1;
 `;
