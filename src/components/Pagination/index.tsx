@@ -1,9 +1,8 @@
-import { PAGINATION_LIMIT } from '../../constants';
 import { Button } from '../../styles';
 import { PaginationCounter, PaginationWrapper } from './styles';
 import PaginationProps from './types/types';
 
-export default function Pagination({ count, page, setPage }: PaginationProps) {
+export default function Pagination({ count, page, offset, setPage }: PaginationProps) {
   const prevPageHandle = () => {
     setPage(page - 1);
   };
@@ -18,7 +17,7 @@ export default function Pagination({ count, page, setPage }: PaginationProps) {
         Prev
       </Button>
       <PaginationCounter>{page + 1}</PaginationCounter>
-      <Button disabled={(page + 1) * PAGINATION_LIMIT >= count} onClick={nextPageHandle}>
+      <Button disabled={(page + 1) * offset >= count} onClick={nextPageHandle}>
         Next
       </Button>
     </PaginationWrapper>
