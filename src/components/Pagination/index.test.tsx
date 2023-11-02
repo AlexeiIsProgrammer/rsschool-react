@@ -17,7 +17,7 @@ describe('Pagination', () => {
             setPokemons: () => {},
           }}
         >
-          <Pagination setPage={() => {}} page={1} count={10} />
+          <Pagination setPage={() => {}} page={1} count={10} offset={2} />
         </Context.Provider>
       </Theme>
     );
