@@ -12,7 +12,7 @@ export default function PokemonsList() {
       {pokemons.length === 0 ? (
         <Alert message="Array is empty" description="Find something else.." type="info" />
       ) : (
-        <SearchingList>
+        <SearchingList $offset={offset}>
           {pokemons.map((pokemon) => (
             <Pokemon key={pokemon.name} pokemon={pokemon} />
           ))}

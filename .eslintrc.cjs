@@ -51,5 +51,6 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-cycle': 'off',
     'react/jsx-no-constructed-context-values': 'off',
+    'no-nested-ternary': 'off',
   },
 };
