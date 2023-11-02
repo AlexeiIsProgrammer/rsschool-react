@@ -53,5 +53,6 @@ module.exports = {
     'react/jsx-no-constructed-context-values': 'off',
     'no-param-reassign': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'no-nested-ternary': 'off',
   },
 };

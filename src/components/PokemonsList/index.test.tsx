@@ -5,7 +5,7 @@ import { renderWithProviders } from '../../test';
 
 describe('App', () => {
   it('should render message about empty array', () => {
-    renderWithProviders(<PokemonsList />);
+    renderWithProviders(<PokemonsList offset={2} />);
 
     const expectedText = 'Array is empty';
 
@@ -14,6 +14,6 @@ describe('App', () => {
     expect(value).toHaveTextContent(expectedText);
   });
   it('should render cards', () => {
-    renderWithProviders(<PokemonsList />);
+    renderWithProviders(<PokemonsList offset={2} />);
   });
 });

@@ -6,7 +6,7 @@ import { renderWithProviders } from '../../test';
 
 describe('Pagination', () => {
   it('should render message about empty array', () => {
-    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} />);
+    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} offset={2} />);
 
     const prevButton = screen.getByText('Prev');
     const nextButton = screen.getByText('Next');
@@ -16,7 +16,7 @@ describe('Pagination', () => {
   });
 
   it('should click next button', () => {
-    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} />);
+    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} offset={2} />);
 
     const nextButton = screen.getByText('Next');
     expect(nextButton).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('Pagination', () => {
   });
 
   it('should click prev button', () => {
-    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} />);
+    renderWithProviders(<Pagination setPage={() => {}} page={1} count={10} offset={2} />);
 
     const prevButton = screen.getByText('Prev');
     expect(prevButton).toBeInTheDocument();

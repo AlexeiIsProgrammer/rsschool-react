@@ -7,11 +7,11 @@ export const SearchingContainer = styled.div`
   background-color: ${(props) => props.theme.colors.lightblack};
   padding: 16px;
 
-  max-width: 400px;
+  max-width: 500px;
 `;
 
 export const SearchingSizeContainer = styled.div`
-  height: 70vh;
+  height: 60vh;
 
   overflow-y: auto;
   overflow-x: hidden;

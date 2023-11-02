@@ -52,7 +52,7 @@ export default function PokemonPage() {
       {!isClosed && (
         <>
           <PokemonDetailsClose onClick={closeModalHandle}>
-            <AiFillCloseCircle />
+            <AiFillCloseCircle color="white" />
           </PokemonDetailsClose>
 
           <PokemonDetails>
