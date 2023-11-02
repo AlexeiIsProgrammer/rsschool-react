@@ -1,11 +1,8 @@
-import { render } from '@testing-library/react';
 import { describe, it, vi } from 'vitest';
 
 import { useState } from 'react';
-import { MemoryRouter } from 'react-router-dom';
-
+import { renderWithProviders } from '../../test';
 import PokemonPage from '.';
-import Theme from '../../theme';
 
 let mockSearchParam = '';
 
@@ -27,18 +24,8 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-function Wrapper() {
-  return (
-    <Theme>
-      <MemoryRouter>
-        <PokemonPage />
-      </MemoryRouter>
-    </Theme>
-  );
-}
-
 describe('Pokemon', () => {
   it('should render PokemonPage', () => {
-    render(<Wrapper />);
+    renderWithProviders(<PokemonPage />);
   });
 });

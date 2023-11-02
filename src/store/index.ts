@@ -12,9 +12,11 @@ import {
 import storage from 'redux-persist/lib/storage';
 import { pokemonApi } from '../services/PokemonAPI';
 import searchReducer from './slices/SearchSlice';
+import pokemonReducer from './slices/PokemonSlice';
 
 const rootReducer = combineReducers({
   searchReducer,
+  pokemonReducer,
   [pokemonApi.reducerPath]: pokemonApi.reducer,
 });
 

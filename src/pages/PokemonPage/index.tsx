@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { AiFillCaretLeft, AiFillCloseCircle } from 'react-icons/ai';
 import Spinner from '../../components/Spinner';
@@ -11,25 +12,42 @@ import {
   PokemonName,
 } from './styles';
 import { useGetPokemonQuery } from '../../services/PokemonAPI';
+import { useAppSelector } from '../../hooks';
+import { pokemonSelector } from '../../store/selectors/PokemonSelector';
 
 export default function PokemonPage() {
   const { pokemonId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isClosed, setIsClosed] = useState(
+    searchParams.get('details') === '0' || searchParams.get('details') === null
+  );
+
+  const { isActive } = useAppSelector(pokemonSelector);
 
   const { data, isLoading, error } = useGetPokemonQuery({
     id: pokemonId || '',
   });
 
-  const isClosed = searchParams.get('details') === '0' || searchParams.get('details') === null;
+  useEffect(() => {
+    setIsClosed(isActive);
+  }, [isActive]);
+
+  useEffect(() => {
+    if (searchParams.get('details') === '0') setIsClosed(true);
+  }, [searchParams]);
 
   const closeModalHandle = () => {
     searchParams.set('details', '0');
     setSearchParams(searchParams);
+
+    setIsClosed(true);
   };
 
   const openModalHandle = () => {
     searchParams.set('details', '1');
     setSearchParams(searchParams);
+
+    setIsClosed(false);
   };
 
   if (error) {

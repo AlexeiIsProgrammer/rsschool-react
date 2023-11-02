@@ -5,7 +5,18 @@ import { renderWithProviders } from '../../test';
 
 describe('App', () => {
   it('should render message about empty array', () => {
-    renderWithProviders(<PokemonsList offset={2} />);
+    renderWithProviders(<PokemonsList offset={2} />, {
+      preloadedState: {
+        searchReducer: {
+          itemsPerPage: [],
+          isLoading: false,
+          query: '',
+          viewMode: '',
+          error: '',
+        },
+        pokemonApi: undefined,
+      },
+    });
 
     const expectedText = 'Array is empty';
 
