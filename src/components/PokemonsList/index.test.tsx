@@ -16,7 +16,7 @@ describe('App', () => {
             setPokemons: () => {},
           }}
         >
-          <PokemonsList />
+          <PokemonsList offset={2} page={2} />
         </Context.Provider>
       </Theme>
     );
@@ -30,7 +30,7 @@ describe('App', () => {
   it('should render cards', () => {
     render(
       <Theme>
-        <PokemonsList />
+        <PokemonsList offset={2} page={2} />
       </Theme>
     );
   });

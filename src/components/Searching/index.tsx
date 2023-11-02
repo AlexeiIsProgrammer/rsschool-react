@@ -45,12 +45,7 @@ function Searching() {
 
         if (localQuery !== null) {
           setQuery(localQuery);
-          setPokemons(
-            searchPokemons(localQuery, pokemonsResponse.results).slice(
-              page * PAGINATION_LIMIT,
-              page * PAGINATION_LIMIT + PAGINATION_LIMIT
-            )
-          );
+          setPokemons(searchPokemons(localQuery, pokemonsResponse.results));
         }
       }
     }
@@ -69,7 +64,7 @@ function Searching() {
 
   useEffect(() => {
     fetchPokemons();
-  }, [offset]);
+  }, []);
 
   useEffect(() => {
     searchParams.set('page', (page + 1).toString());
@@ -80,13 +75,9 @@ function Searching() {
     setPage(0);
     setOffset(1);
   }, [query]);
+
   useEffect(() => {
-    setPokemons(
-      searchPokemons(query, requestedPokemons).slice(
-        page * PAGINATION_LIMIT,
-        page * PAGINATION_LIMIT + PAGINATION_LIMIT
-      )
-    );
+    setPokemons(searchPokemons(query, requestedPokemons));
   }, [query, page]);
 
   let content: JSX.Element;
@@ -98,25 +89,16 @@ function Searching() {
     case error !== '':
       content = <Alert message="Error !!!" description={error} type="error" />;
       break;
-    case searchedPokemons.length === 0:
+    case pokemons.length === 0:
       content = <Alert message="Array is empty" description="Find something else.." type="info" />;
       break;
     default:
       content = (
         <>
           <SearchingSizeContainer>
-            <PokemonsList
-              offset={offset}
-              setPage={setPage}
-              pokemons={searchedPokemons.slice(page * offset, page * offset + offset)}
-            />
+            <PokemonsList page={page} offset={offset} />
           </SearchingSizeContainer>
-          <Pagination
-            setPage={setPage}
-            page={page}
-            offset={offset}
-            count={searchedPokemons.length}
-          />
+          <Pagination setPage={setPage} page={page} offset={offset} count={pokemons.length} />
         </>
       );
       break;
@@ -132,9 +114,9 @@ function Searching() {
       }}
     >
       <ContainerWrapper>
-        <SearchInput setQuery={(val: string) => setQuery(val)} />
+        <SearchInput />
 
-        <InputRange value={offset} count={searchedPokemons.length} onChange={inputRangeHandle} />
+        <InputRange value={offset} count={pokemons.length} onChange={inputRangeHandle} />
 
         {content}
         <FallbackUIButton />
