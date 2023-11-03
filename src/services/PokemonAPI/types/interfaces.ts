@@ -1,5 +1,7 @@
 export interface GetPokemonsArgs {
   limit?: number;
+  page?: number;
+  name?: string;
 }
 export interface GetPokemonArgs {
   id: string;
@@ -10,10 +12,10 @@ export type PokemonURL = {
   name: string;
 };
 export interface PokemonsResponse {
-  count: null | number;
-  next: string;
-  previous: null | number;
-  results: PokemonURL[];
+  meta: {
+    total_pages: number;
+  };
+  items: PokemonURL[];
 }
 
 export type Pokemon = {

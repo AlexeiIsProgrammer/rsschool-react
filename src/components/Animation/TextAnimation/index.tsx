@@ -9,7 +9,7 @@ import {
 } from './styles';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
-import { setIsActive, setPokemonInfo } from '../../../store/slices/PokemonSlice';
+import { setPokemonInfo } from '../../../store/slices/PokemonSlice';
 
 export default function TextAnimation() {
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -29,7 +29,6 @@ export default function TextAnimation() {
       if (isFirstTime) {
         setIsFirstTime(false);
       } else {
-        dispatch(setIsActive(true));
         setTimeout(() => {
           setTimer(setTimeout(innerTimeout, 5000));
         }, 500);

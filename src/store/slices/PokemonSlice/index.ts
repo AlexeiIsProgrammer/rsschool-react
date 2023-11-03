@@ -29,9 +29,14 @@ export const pokemonSlice = createSlice({
         state.isActive = action.payload;
       }
     },
+    setIsImage(state, action: PayloadAction<string>) {
+      if (action) {
+        state.image = action.payload;
+      }
+    },
   },
 });
 
-export const { setPokemonInfo, setIsActive } = pokemonSlice.actions;
+export const { setPokemonInfo, setIsActive, setIsImage } = pokemonSlice.actions;
 
 export default pokemonSlice.reducer;

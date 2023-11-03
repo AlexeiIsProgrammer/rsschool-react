@@ -16,16 +16,10 @@ import { searchSelector } from '../../store/selectors/SearchSelector';
 import { setPageItems } from '../../store/slices/SearchSlice';
 
 import InputRange from '../InputRange';
-import { PokemonURL } from '../../services/PokemonAPI/types/interfaces';
-import searchPokemons from '../../utils/sort';
 
 function Searching() {
   const dispatch = useAppDispatch();
   const { query, itemsPerPage } = useAppSelector(searchSelector);
-  const { data, isLoading, error } = useGetPokemonsQuery({});
-
-  const [searchedPokemons, setSearchedPokemons] = useState<PokemonURL[]>([]);
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageParam = +(searchParams.get('page') || 1) - 1;
@@ -33,8 +27,14 @@ function Searching() {
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
 
+  const { data, isLoading, error } = useGetPokemonsQuery({
+    name: query,
+    page,
+    limit: offset,
+  });
+
   const inputRangeHandle = (e: React.FormEvent<HTMLInputElement> | number) => {
-    setPage(0);
+    setPage(1);
     if (typeof e === 'number') {
       setOffset(e);
     } else {
@@ -44,28 +44,22 @@ function Searching() {
 
   useEffect(() => {
     if (data) {
-      setSearchedPokemons(searchPokemons(query, data.results));
-    }
-  }, [data, query]);
-
-  useEffect(() => {
-    if (data) {
       dispatch(
         setPageItems({
           query,
-          itemsPerPage: searchedPokemons.slice(page * offset, page * offset + offset),
+          itemsPerPage: data.items,
         })
       );
     }
-  }, [searchedPokemons, page, offset]);
+  }, [data]);
 
   useEffect(() => {
-    searchParams.set('page', (page + 1).toString());
+    searchParams.set('page', page.toString());
     setSearchParams(searchParams);
   }, [page]);
 
   useEffect(() => {
-    setPage(0);
+    setPage(1);
     setOffset(1);
   }, [query]);
 
@@ -87,12 +81,7 @@ function Searching() {
           <SearchingSizeContainer>
             <PokemonsList offset={offset} />
           </SearchingSizeContainer>
-          <Pagination
-            setPage={setPage}
-            page={page}
-            offset={offset}
-            count={searchedPokemons.length || 0}
-          />
+          <Pagination setPage={setPage} page={page} total_pages={data?.meta.total_pages || 0} />
         </>
       );
       break;
@@ -112,7 +101,7 @@ function Searching() {
 
         <InputRange
           value={offset}
-          count={searchedPokemons.length || 0}
+          count={data?.meta.total_pages || 0}
           onChange={inputRangeHandle}
         />
 

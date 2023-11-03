@@ -1,8 +1,7 @@
 type PaginationProps = {
   setPage: React.Dispatch<React.SetStateAction<number>>;
-  count: number;
+  total_pages: number;
   page: number;
-  offset: number;
 };
 
 export default PaginationProps;

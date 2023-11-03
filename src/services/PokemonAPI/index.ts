@@ -4,7 +4,7 @@ import { GetPokemonArgs, GetPokemonsArgs, Pokemon, PokemonsResponse } from './ty
 
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: '' }),
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === REHYDRATE) {
       return action.payload[reducerPath];
@@ -15,16 +15,18 @@ export const pokemonApi = createApi({
   },
   endpoints: (builder) => ({
     getPokemons: builder.query<PokemonsResponse, GetPokemonsArgs>({
-      query: ({ limit = 1000 }) => ({
-        url: 'pokemon/',
+      query: ({ limit = 1000, name = '', page = 1 }) => ({
+        url: 'https://fcc6971121ab81f7.mokky.dev/pokemon/',
         params: {
           limit,
+          name: `*${name}`,
+          page,
         },
       }),
     }),
     getPokemon: builder.query<Pokemon, GetPokemonArgs>({
       query: ({ id }) => ({
-        url: `pokemon/${id}`,
+        url: `https://pokeapi.co/api/v2/pokemon/${id}`,
       }),
     }),
   }),

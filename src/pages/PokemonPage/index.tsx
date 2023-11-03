@@ -12,8 +12,9 @@ import {
   PokemonName,
 } from './styles';
 import { useGetPokemonQuery } from '../../services/PokemonAPI';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { pokemonSelector } from '../../store/selectors/PokemonSelector';
+import { setIsImage } from '../../store/slices/PokemonSlice';
 
 export default function PokemonPage() {
   const { pokemonId } = useParams();
@@ -22,6 +23,7 @@ export default function PokemonPage() {
     searchParams.get('details') === '0' || searchParams.get('details') === null
   );
 
+  const dispatch = useAppDispatch();
   const { isActive } = useAppSelector(pokemonSelector);
 
   const { data, isLoading, error } = useGetPokemonQuery({
@@ -31,6 +33,10 @@ export default function PokemonPage() {
   useEffect(() => {
     setIsClosed(isActive);
   }, [isActive]);
+
+  useEffect(() => {
+    dispatch(setIsImage(data?.sprites.front_default || ''));
+  }, [data]);
 
   useEffect(() => {
     if (searchParams.get('details') === '0') setIsClosed(true);
