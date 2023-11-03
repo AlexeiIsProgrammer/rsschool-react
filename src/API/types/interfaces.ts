@@ -1,8 +1,8 @@
 export interface PokemonsResponse {
-  count: null | number;
-  next: string;
-  previous: null | number;
-  results: PokemonURL[];
+  meta: {
+    total_pages: number;
+  };
+  items: PokemonURL[];
 }
 
 export type PokemonURL = {

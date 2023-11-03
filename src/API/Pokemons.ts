@@ -2,17 +2,21 @@ import axios from 'axios';
 import { Pokemon, PokemonsResponse } from './types/interfaces';
 
 export default class PokemonsAPI {
+  private static customURL = 'https://fcc6971121ab81f7.mokky.dev/pokemon';
+
   private static baseURL = 'https://pokeapi.co/api/v2/pokemon/';
 
   static async getPokemons(
-    offset: number = 0,
-    limit: number = 2000
+    page: number = 0,
+    limit: number = 2000,
+    name: string = ''
   ): Promise<PokemonsResponse | Error | undefined> {
     try {
-      const response = await axios.get(this.baseURL, {
+      const response = await axios.get(this.customURL, {
         params: {
           limit,
-          offset,
+          page,
+          name: `*${name}`,
         },
       });
       return response.data;

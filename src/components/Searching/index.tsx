@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import PokemonsAPI from '../../API/Pokemons';
 
-import { PokemonURL } from '../../API/types/interfaces';
 import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
@@ -12,7 +11,6 @@ import PokemonsList from '../PokemonsList';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 import SearchInput from '../SearchInput';
-import searchPokemons from '../../utils/sort';
 import InputRange from '../InputRange';
 
 function Searching() {
@@ -20,33 +18,26 @@ function Searching() {
   const [error, setError] = useState<string>('');
   const { pokemons, setPokemons, query, setQuery } = useContext(Context);
 
-  const [requestedPokemons, setRequestedPokemons] = useState<PokemonURL[]>([]);
-
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageParam = +(searchParams.get('page') || 1) - 1;
+  const pageParam = +(searchParams.get('page') || 1);
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fetchPokemons = async () => {
     setLoading(true);
     setError('');
 
-    const pokemonsResponse = await PokemonsAPI.getPokemons();
+    const pokemonsResponse = await PokemonsAPI.getPokemons(page, offset, query);
 
     if (pokemonsResponse) {
       if (pokemonsResponse instanceof Error) {
         setError(pokemonsResponse.message);
       } else {
-        setRequestedPokemons(pokemonsResponse.results);
-
-        const localQuery = localStorage.getItem('query');
-
-        if (localQuery !== null) {
-          setQuery(localQuery);
-          setPokemons(searchPokemons(localQuery, pokemonsResponse.results));
-        }
+        setPokemons(pokemonsResponse.items);
+        setTotalPages(pokemonsResponse.meta.total_pages);
       }
     }
 
@@ -54,7 +45,7 @@ function Searching() {
   };
 
   const inputRangeHandle = (e: React.FormEvent<HTMLInputElement> | number) => {
-    setPage(0);
+    setPage(1);
     if (typeof e === 'number') {
       setOffset(e);
     } else {
@@ -63,22 +54,26 @@ function Searching() {
   };
 
   useEffect(() => {
-    fetchPokemons();
+    const localQuery = localStorage.getItem('query');
+
+    if (localQuery) {
+      setQuery(localQuery);
+    }
   }, []);
 
   useEffect(() => {
-    searchParams.set('page', (page + 1).toString());
+    fetchPokemons();
+  }, [offset, query, page]);
+
+  useEffect(() => {
+    searchParams.set('page', page.toString());
     setSearchParams(searchParams);
   }, [page]);
 
   useEffect(() => {
-    setPage(0);
+    setPage(1);
     setOffset(1);
   }, [query]);
-
-  useEffect(() => {
-    setPokemons(searchPokemons(query, requestedPokemons));
-  }, [query, page]);
 
   let content: JSX.Element;
 
@@ -96,9 +91,9 @@ function Searching() {
       content = (
         <>
           <SearchingSizeContainer>
-            <PokemonsList page={page} offset={offset} />
+            <PokemonsList offset={offset} page={page} />
           </SearchingSizeContainer>
-          <Pagination setPage={setPage} page={page} offset={offset} count={pokemons.length} />
+          <Pagination setPage={setPage} page={page} total_pages={totalPages} />
         </>
       );
       break;
@@ -116,7 +111,7 @@ function Searching() {
       <ContainerWrapper>
         <SearchInput />
 
-        <InputRange value={offset} count={pokemons.length} onChange={inputRangeHandle} />
+        <InputRange value={offset} count={totalPages} onChange={inputRangeHandle} />
 
         {content}
         <FallbackUIButton />

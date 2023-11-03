@@ -23,7 +23,6 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0",
-    "sass": "^1.69.5",
     "styled-components": "^6.1.0",
     "use-debounce": "^9.0.4"
   },
@@ -52,6 +51,7 @@
     "lint-staged": "^15.0.2",
     "msw": "^2.0.1",
     "prettier": "^3.0.3",
+    "sass": "^1.69.5",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"
