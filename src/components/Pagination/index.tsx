@@ -2,7 +2,7 @@ import { Button } from '../../styles';
 import { PaginationCounter, PaginationWrapper } from './styles';
 import PaginationProps from './types/types';
 
-export default function Pagination({ count, page, offset, setPage }: PaginationProps) {
+export default function Pagination({ total_pages, page, setPage }: PaginationProps) {
   const prevPageHandle = () => {
     setPage(page - 1);
   };
@@ -13,11 +13,11 @@ export default function Pagination({ count, page, offset, setPage }: PaginationP
 
   return (
     <PaginationWrapper>
-      <Button disabled={page === 0} onClick={prevPageHandle}>
+      <Button disabled={page === 1} onClick={prevPageHandle}>
         Prev
       </Button>
-      <PaginationCounter>{page + 1}</PaginationCounter>
-      <Button disabled={(page + 1) * offset >= count} onClick={nextPageHandle}>
+      <PaginationCounter>{page}</PaginationCounter>
+      <Button disabled={page === total_pages} onClick={nextPageHandle}>
         Next
       </Button>
     </PaginationWrapper>
