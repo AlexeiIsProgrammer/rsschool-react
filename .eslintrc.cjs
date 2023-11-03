@@ -49,5 +49,6 @@ module.exports = {
     'consistent-return': 'off',
     'react/prefer-stateless-function': 'off',
     'import/prefer-default-export': 'off',
+    'no-param-reassign': 'off',
   },
 };
