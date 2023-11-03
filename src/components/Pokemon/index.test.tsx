@@ -9,7 +9,7 @@ import Theme from '../../theme';
 let mockSearchParam = '';
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
+  const actual: object = await vi.importActual('react-router-dom');
 
   return {
     ...actual,

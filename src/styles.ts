@@ -25,7 +25,7 @@ export const Button = styled.button`
 export const SearchingList = styled.div<{ $offset: number }>`
   display: grid;
   grid-template-columns: ${(props) =>
-    props.$offset < 5 ? '1fr' : props.$offset < 15 ? '1fr 1fr' : '1fr 1fr 1fr'};
+    props.$offset < 7 ? '1fr' : props.$offset < 18 ? '1fr 1fr' : '1fr 1fr 1fr'};
 
   row-gap: 16px;
   column-gap: 18px;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
+  PokemonAnimationWrapper,
   TextAnimationBlock,
   TextAnimationContainer,
   TextAnimationShadow,
@@ -8,7 +9,7 @@ import {
 } from './styles';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
-import { setIsActive, setPokemonName } from '../../../store/slices/PokemonSlice';
+import { setIsActive, setPokemonInfo } from '../../../store/slices/PokemonSlice';
 
 export default function TextAnimation() {
   const [isFirstTime, setIsFirstTime] = useState(true);
@@ -17,11 +18,10 @@ export default function TextAnimation() {
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
   const dispatch = useAppDispatch();
-  const { name, isActive } = useAppSelector(pokemonSelector);
+  const { name, image, isActive } = useAppSelector(pokemonSelector);
 
   const innerTimeout = useCallback(() => {
-    dispatch(setIsActive(false));
-    dispatch(setPokemonName(''));
+    dispatch(setPokemonInfo({ name: '', image: '', isActive: false }));
   }, []);
 
   useEffect(() => {
@@ -41,8 +41,7 @@ export default function TextAnimation() {
     isActive && (
       <TextAnimationWrapper
         onClick={() => {
-          dispatch(setIsActive(false));
-          dispatch(setPokemonName(''));
+          dispatch(setPokemonInfo({ name: '', image: '', isActive: false }));
 
           searchParams.set('details', '1');
           setSearchParams(searchParams);
@@ -55,7 +54,12 @@ export default function TextAnimation() {
           <TextAnimationBlock $order={0}>I</TextAnimationBlock>
           <TextAnimationBlock $order={1}>Choose</TextAnimationBlock>
           <TextAnimationBlock $order={2}>You</TextAnimationBlock>
-          <TextAnimationBlock $order={3}>{name}!</TextAnimationBlock>
+          <TextAnimationBlock $order={3}>
+            <PokemonAnimationWrapper>
+              <span>{name}!</span>
+              <img width={200} src={image} alt="name" />
+            </PokemonAnimationWrapper>
+          </TextAnimationBlock>
         </TextAnimationContainer>
       </TextAnimationWrapper>
     )

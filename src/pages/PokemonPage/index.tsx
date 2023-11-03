@@ -60,11 +60,26 @@ export default function PokemonPage() {
     );
   }
 
+  const PokemonDetailsComponent = React.memo(() => (
+    <PokemonDetails>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <PokemonName>{data.name.toUpperCase()}</PokemonName>
+          <PokemonName>Height: {data.height}</PokemonName>
+          <PokemonName>Weight: {data.weight}</PokemonName>
+          <PokemonImage src={data.sprites.front_default} alt="pokich" />
+        </>
+      )}
+    </PokemonDetails>
+  ));
+
   return (
     <PokemonDetailsWrapper $isClosed={isClosed}>
       {isClosed && (
         <PokemonDetailsOpen onClick={openModalHandle}>
-          <AiFillCaretLeft />
+          <AiFillCaretLeft color="white" />
         </PokemonDetailsOpen>
       )}
       {!isClosed && (
@@ -72,19 +87,7 @@ export default function PokemonPage() {
           <PokemonDetailsClose onClick={closeModalHandle}>
             <AiFillCloseCircle color="white" />
           </PokemonDetailsClose>
-
-          <PokemonDetails>
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <PokemonName>{data.name.toUpperCase()}</PokemonName>
-                <PokemonName>Height: {data.height}</PokemonName>
-                <PokemonName>Weight: {data.weight}</PokemonName>
-                <PokemonImage src={data.sprites.front_default} alt="pokich" />
-              </>
-            )}
-          </PokemonDetails>
+          <PokemonDetailsComponent />
         </>
       )}
     </PokemonDetailsWrapper>

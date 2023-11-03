@@ -4,9 +4,14 @@ import Alert from '../Alert';
 import { useAppSelector } from '../../hooks';
 import { searchSelector } from '../../store/selectors/SearchSelector';
 import PokemonsListProps from './types/types';
+import Spinner from '../Spinner';
 
 export default function PokemonsList({ offset }: PokemonsListProps) {
-  const { itemsPerPage } = useAppSelector(searchSelector);
+  const { itemsPerPage, isLoading } = useAppSelector(searchSelector);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <ContainerWrapper>

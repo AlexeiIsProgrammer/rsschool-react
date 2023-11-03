@@ -3,17 +3,23 @@ import { ListItem } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
 import { PokemonProps } from './types/types';
 import { useAppDispatch } from '../../hooks';
-import { setPokemonName } from '../../store/slices/PokemonSlice';
+import { setPokemonInfo } from '../../store/slices/PokemonSlice';
+import { useGetPokemonQuery } from '../../services/PokemonAPI';
 
 function Pokemon({ pokemon }: PokemonProps) {
   const { url, name } = pokemon;
+
   const [searchParams] = useSearchParams();
   const id = url.split('/').at(-2);
+
+  const { data } = useGetPokemonQuery({
+    id: id || '',
+  });
 
   const dispatch = useAppDispatch();
 
   const clickLinkHandle = () => {
-    dispatch(setPokemonName(name));
+    dispatch(setPokemonInfo({ name, image: data?.sprites.front_default || '', isActive: true }));
   };
 
   return (

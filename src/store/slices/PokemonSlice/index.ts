@@ -3,6 +3,7 @@ import { PokemonState } from './types/interfaces';
 
 const initialState: PokemonState = {
   name: '',
+  image: '',
   isActive: false,
 
   isLoading: false,
@@ -13,9 +14,14 @@ export const pokemonSlice = createSlice({
   name: 'pokemon',
   initialState,
   reducers: {
-    setPokemonName(state, action: PayloadAction<string>) {
+    setPokemonInfo(
+      state,
+      action: PayloadAction<{ name: string; image: string; isActive: boolean }>
+    ) {
       if (action) {
-        state.name = action.payload;
+        state.name = action.payload.name;
+        state.image = action.payload.image;
+        state.isActive = action.payload.isActive;
       }
     },
     setIsActive(state, action: PayloadAction<boolean>) {
@@ -26,6 +32,6 @@ export const pokemonSlice = createSlice({
   },
 });
 
-export const { setPokemonName, setIsActive } = pokemonSlice.actions;
+export const { setPokemonInfo, setIsActive } = pokemonSlice.actions;
 
 export default pokemonSlice.reducer;

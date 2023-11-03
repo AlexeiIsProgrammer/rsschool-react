@@ -117,3 +117,10 @@ export const TextAnimationBlock = styled.p<{ $order: number }>`
   animation: ${(props) => (props.$order === 3 ? endScaling : scaling)}
     ${(props) => (props.$order === 3 ? '.5' : '1')}s linear ${(props) => props.$order + 1}s forwards;
 `;
+
+export const PokemonAnimationWrapper = styled.span`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;

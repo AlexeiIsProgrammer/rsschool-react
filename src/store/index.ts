@@ -23,6 +23,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['pokemonApi', 'pokemonReducer'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -52,6 +53,6 @@ export function setupStore(preloadedState?: PreloadedState<RootState>) {
 
 export const persistor = persistStore(store);
 
-export type AppStore = ReturnType<typeof configureStore>;
+export type AppStore = ReturnType<typeof setupStore>;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
