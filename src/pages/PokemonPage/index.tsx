@@ -39,6 +39,12 @@ export default function PokemonPage() {
   }, [data]);
 
   useEffect(() => {
+    if (isActive) {
+      dispatch(setIsImage(data?.sprites.front_default || ''));
+    }
+  }, [isActive]);
+
+  useEffect(() => {
     if (searchParams.get('details') === '0') setIsClosed(true);
   }, [searchParams]);
 

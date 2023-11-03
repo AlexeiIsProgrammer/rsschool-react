@@ -12,8 +12,6 @@ import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
 import { setPokemonInfo } from '../../../store/slices/PokemonSlice';
 
 export default function TextAnimation() {
-  const [isFirstTime, setIsFirstTime] = useState(true);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
@@ -26,13 +24,9 @@ export default function TextAnimation() {
 
   useEffect(() => {
     if (name !== '') {
-      if (isFirstTime) {
-        setIsFirstTime(false);
-      } else {
-        setTimeout(() => {
-          setTimer(setTimeout(innerTimeout, 5000));
-        }, 500);
-      }
+      setTimeout(() => {
+        setTimer(setTimeout(innerTimeout, 5000));
+      }, 500);
     }
   }, [name]);
 
