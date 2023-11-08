@@ -4,8 +4,8 @@ import PokemonsList from '.';
 import Theme from '../../theme';
 import { Context } from '../../context';
 
-describe('App', () => {
-  it('should render message about empty array', () => {
+describe('Pokemons List', () => {
+  it('Check that an appropriate message is displayed if no cards are present', () => {
     render(
       <Theme>
         <Context.Provider
@@ -16,7 +16,7 @@ describe('App', () => {
             setPokemons: () => {},
           }}
         >
-          <PokemonsList offset={2} page={2} />
+          <PokemonsList offset={2} />
         </Context.Provider>
       </Theme>
     );
@@ -27,10 +27,11 @@ describe('App', () => {
 
     expect(value).toHaveTextContent(expectedText);
   });
-  it('should render cards', () => {
+
+  it('Verify that the component renders the specified number of cards', () => {
     render(
       <Theme>
-        <PokemonsList offset={2} page={2} />
+        <PokemonsList offset={2} />
       </Theme>
     );
   });

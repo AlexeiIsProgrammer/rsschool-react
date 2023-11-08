@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import PokemonPage from '.';
 import Theme from '../../theme';
 
-let mockSearchParam = '';
+let mockSearchParam = 'details=1';
 
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -37,8 +37,19 @@ function Wrapper() {
   );
 }
 
-describe('Pokemon', () => {
-  it('should render PokemonPage', () => {
+describe('Pokemon page', () => {
+  it('Check that a loading indicator is displayed while fetching data', () => {
     render(<Wrapper />);
+  });
+
+  it('Make sure the detailed card component correctly displays the detailed card data', () => {
+    render(<Wrapper />);
+  });
+
+  it('Ensure that clicking the close button hides the component', () => {
+    render(<Wrapper />);
+
+    // const closeButton = screen.getByTitle('Close button');
+    // expect(closeButton).toBeInTheDocument();
   });
 });

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { useState } from 'react';
 import { MemoryRouter } from 'react-router-dom';
@@ -37,11 +37,21 @@ function Wrapper() {
 }
 
 describe('Pokemon', () => {
-  it('should render pokemon component', () => {
+  it('Ensure that the card component renders the relevant card data', () => {
     render(<Wrapper />);
+
+    const name = screen.getByText('bulbasaur');
+    expect(name).toBeInTheDocument();
   });
 
-  it('should click pokemon link', async () => {
+  it('Validate that clicking on a card opens a detailed card component', async () => {
+    render(<Wrapper />);
+
+    const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
+    fireEvent.click(button);
+  });
+
+  it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
     render(<Wrapper />);
 
     const button: HTMLButtonElement = await screen.findByText('Open the pokemon');

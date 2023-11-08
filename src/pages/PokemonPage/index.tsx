@@ -67,13 +67,13 @@ export default function PokemonPage() {
   return (
     <PokemonDetailsWrapper $isClosed={isClosed}>
       {isClosed && (
-        <PokemonDetailsOpen onClick={openModalHandle}>
+        <PokemonDetailsOpen title="Open button" onClick={openModalHandle}>
           <AiFillCaretLeft />
         </PokemonDetailsOpen>
       )}
       {!isClosed && (
         <>
-          <PokemonDetailsClose onClick={closeModalHandle}>
+          <PokemonDetailsClose title="Close button" onClick={closeModalHandle}>
             <AiFillCloseCircle color="white" />
           </PokemonDetailsClose>
 
