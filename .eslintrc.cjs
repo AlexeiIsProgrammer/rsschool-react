@@ -50,5 +50,6 @@ module.exports = {
     'react/prefer-stateless-function': 'off',
     'import/prefer-default-export': 'off',
     'no-param-reassign': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
 };
