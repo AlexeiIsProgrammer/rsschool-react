@@ -6,12 +6,12 @@ import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
+import InputRange from '../InputRange';
 import Pagination from '../Pagination';
 import PokemonsList from '../PokemonsList';
+import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
-import SearchInput from '../SearchInput';
-import InputRange from '../InputRange';
 
 function Searching() {
   const [loading, setLoading] = useState<boolean>(false);
