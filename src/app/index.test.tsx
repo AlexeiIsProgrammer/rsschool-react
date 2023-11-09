@@ -3,14 +3,9 @@ import { screen, render } from '@testing-library/react';
 import App from '.';
 
 describe('App', () => {
-  it('should render hello world', () => {
+  it('should render uncontrolled', () => {
     render(<App />);
-    const heading = 'Hello world!';
 
-    expect(
-      screen.getByRole('heading', {
-        level: 1,
-      })
-    ).toHaveTextContent(heading);
+    expect(screen.getByText('Uncontrolled')).toBeInTheDocument();
   });
 });
