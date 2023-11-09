@@ -3,10 +3,11 @@ import { useDebounce } from 'use-debounce';
 
 import InputRangeProps from './types/types';
 import { InputRangeContainer, InputRangeValue, InputRangeWrapper } from './styles';
+import { DEBOUNCE_DELAY, MAX_POKEMONS_PER_PAGE } from '../../constants';
 
 export default function InputRange({ onChange, count, value }: InputRangeProps) {
   const [rangeValue, setRangeValue] = useState(1);
-  const [debounceValue] = useDebounce(rangeValue, 500);
+  const [debounceValue] = useDebounce(rangeValue, DEBOUNCE_DELAY);
 
   useEffect(() => {
     setRangeValue(value);
@@ -26,7 +27,7 @@ export default function InputRange({ onChange, count, value }: InputRangeProps) 
         type="number"
         value={rangeValue}
         onChange={onInputChange}
-        max={count < 200 ? count : 200}
+        max={count < MAX_POKEMONS_PER_PAGE ? count : MAX_POKEMONS_PER_PAGE}
         min={1}
       />
       <InputRangeWrapper
@@ -34,7 +35,7 @@ export default function InputRange({ onChange, count, value }: InputRangeProps) 
         value={rangeValue}
         onChange={onInputChange}
         min={1}
-        max={count < 200 ? count : 200}
+        max={count < MAX_POKEMONS_PER_PAGE ? count : MAX_POKEMONS_PER_PAGE}
       />
     </InputRangeContainer>
   );

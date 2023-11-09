@@ -1,3 +1,4 @@
+import { FIRST_PAGE } from '../../constants';
 import { Button } from '../../styles';
 import { PaginationCounter, PaginationWrapper } from './styles';
 import PaginationProps from './types/types';
@@ -13,7 +14,7 @@ export default function Pagination({ total_pages, page, setPage }: PaginationPro
 
   return (
     <PaginationWrapper>
-      <Button disabled={page === 1} onClick={prevPageHandle}>
+      <Button disabled={page === FIRST_PAGE} onClick={prevPageHandle}>
         Prev
       </Button>
       <PaginationCounter>{page}</PaginationCounter>

@@ -1,18 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { AiFillCaretLeft } from 'react-icons/ai';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { AiFillCaretLeft, AiFillCloseCircle } from 'react-icons/ai';
 import PokemonsAPI from '../../API/Pokemons';
-import Spinner from '../../components/Spinner';
-import Alert from '../../components/Alert';
 import { Pokemon } from '../../API/types/interfaces';
-import {
-  PokemonDetails,
-  PokemonDetailsClose,
-  PokemonDetailsOpen,
-  PokemonDetailsWrapper,
-  PokemonImage,
-  PokemonName,
-} from './styles';
+import Alert from '../../components/Alert';
+import PokemonCard from '../../components/PokemonCard';
+
+import { PokemonDetailsOpen, PokemonDetailsWrapper } from './styles';
 
 export default function PokemonPage() {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
@@ -44,11 +38,6 @@ export default function PokemonPage() {
     fetchPokemon();
   }, [pokemonId]);
 
-  const closeModalHandle = () => {
-    searchParams.set('details', '0');
-    setSearchParams(searchParams);
-  };
-
   const openModalHandle = () => {
     searchParams.set('details', '1');
     setSearchParams(searchParams);
@@ -66,30 +55,12 @@ export default function PokemonPage() {
 
   return (
     <PokemonDetailsWrapper $isClosed={isClosed}>
-      {isClosed && (
+      {isClosed ? (
         <PokemonDetailsOpen onClick={openModalHandle}>
           <AiFillCaretLeft />
         </PokemonDetailsOpen>
-      )}
-      {!isClosed && (
-        <>
-          <PokemonDetailsClose onClick={closeModalHandle}>
-            <AiFillCloseCircle color="white" />
-          </PokemonDetailsClose>
-
-          <PokemonDetails>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <>
-                <PokemonName>{pokemon.name.toUpperCase()}</PokemonName>
-                <PokemonName>Height: {pokemon.height}</PokemonName>
-                <PokemonName>Weight: {pokemon.weight}</PokemonName>
-                <PokemonImage src={pokemon.sprites.front_default} alt="pokich" />
-              </>
-            )}
-          </PokemonDetails>
-        </>
+      ) : (
+        <PokemonCard pokemon={pokemon} loading={loading} />
       )}
     </PokemonDetailsWrapper>
   );
