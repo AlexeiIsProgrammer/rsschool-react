@@ -1,23 +1,20 @@
-import React, { Component } from 'react';
-import Berry from '../Pokemon';
+import { ContainerWrapper, SearchingList } from '../../styles';
+import Pokemon from '../Pokemon';
 import { PokemonsListProps } from './types/types';
-import { ContainerWrapper, Row } from '../../styles';
-import searchPokemons from '../../utils/sort';
+import Alert from '../Alert';
 
-export default class PokemonsList extends Component<PokemonsListProps> {
-  render() {
-    const { pokemons, query } = this.props;
-
-    const findedPokemons = searchPokemons(query, pokemons);
-
-    return (
-      <ContainerWrapper>
-        <Row>
-          {findedPokemons.map((pokemon) => (
-            <Berry key={pokemon.name} pokemon={pokemon} />
+export default function PokemonsList({ pokemons, offset }: PokemonsListProps) {
+  return (
+    <ContainerWrapper>
+      {pokemons.length === 0 ? (
+        <Alert message="Array is empty" description="Find something else.." type="info" />
+      ) : (
+        <SearchingList $offset={offset}>
+          {pokemons.map((pokemon) => (
+            <Pokemon key={pokemon.name} pokemon={pokemon} />
           ))}
-        </Row>
-      </ContainerWrapper>
-    );
-  }
+        </SearchingList>
+      )}
+    </ContainerWrapper>
+  );
 }

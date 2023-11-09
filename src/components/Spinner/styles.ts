@@ -5,7 +5,7 @@ export const SpinnerWrapper = styled.span`
   height: 48px;
   border-radius: 50%;
   display: inline-block;
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
 

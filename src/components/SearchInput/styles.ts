@@ -3,19 +3,19 @@ import { styled } from 'styled-components';
 export const Search = styled.input`
   outline: none;
   padding: 10px;
-  border: 4px solid #000;
-  color: #000;
+  border: 2px solid ${(props) => props.theme.colors.orange};
+  color: ${(props) => props.theme.colors.black};
 
   flex: 1;
 
   transition: 0.2s ease all;
 
   &:hover {
-    border-style: dashed;
+    border-style: groove;
   }
 
   &:focus {
-    border-style: groove;
+    border-style: dashed;
   }
 `;
 

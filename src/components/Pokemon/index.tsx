@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import { PokemonProps } from './types/types';
-import { Col } from '../../styles';
+import { useSearchParams } from 'react-router-dom';
+import { ListItem } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
+import { PokemonProps } from './types/types';
 
-class Pokemon extends Component<PokemonProps> {
-  render() {
-    const {
-      pokemon: { url, name },
-    } = this.props;
+function Pokemon({ pokemon }: PokemonProps) {
+  const { url, name } = pokemon;
+  const [searchParams] = useSearchParams();
+  const id = url.split('/').at(-2);
 
-    return (
-      <Col $span={3}>
-        <Card>
-          <CardHeader>{name}</CardHeader>
-          <CardLink href={url}>To pokemon</CardLink>
-        </Card>
-      </Col>
-    );
-  }
+  return (
+    <ListItem $span={3}>
+      <Card>
+        <CardHeader>{name}</CardHeader>
+        <CardLink to={`search/${id}?details=1&page=${searchParams.get('page')}`}>
+          Open the pokemon
+        </CardLink>
+      </Card>
+    </ListItem>
+  );
 }
 
 export default Pokemon;

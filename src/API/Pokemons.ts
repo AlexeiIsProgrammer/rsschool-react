@@ -1,10 +1,24 @@
 import axios from 'axios';
-import { PokemonResponse, PokemonsResponse } from './types/interfaces';
+import { Pokemon, PokemonsResponse } from './types/interfaces';
 
 export default class PokemonsAPI {
-  static async getPokemons(): Promise<PokemonsResponse | Error | undefined> {
+  private static customURL = 'https://fcc6971121ab81f7.mokky.dev/pokemon';
+
+  private static baseURL = 'https://pokeapi.co/api/v2/pokemon/';
+
+  static async getPokemons(
+    page: number = 0,
+    limit: number = 2000,
+    name: string = ''
+  ): Promise<PokemonsResponse | Error | undefined> {
     try {
-      const response = await axios.get('https://pokeapi.co/api/v2/pokemon');
+      const response = await axios.get(this.customURL, {
+        params: {
+          limit,
+          page,
+          name: `*${name}`,
+        },
+      });
       return response.data;
     } catch (e) {
       if (e instanceof Error) {
@@ -13,9 +27,9 @@ export default class PokemonsAPI {
     }
   }
 
-  static async getOnePokemon(url: string): Promise<PokemonResponse | Error | undefined> {
+  static async getOnePokemon(id: string): Promise<Pokemon | Error | undefined> {
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(`${this.baseURL}${id}`);
       return response.data;
     } catch (e) {
       if (e instanceof Error) {

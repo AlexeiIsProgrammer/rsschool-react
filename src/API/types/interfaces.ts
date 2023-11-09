@@ -1,18 +1,20 @@
 export interface PokemonsResponse {
-  count: null | number;
-  next: string;
-  previous: null | number;
-  results: Pokemon[];
+  meta: {
+    total_pages: number;
+  };
+  items: PokemonURL[];
 }
 
-export interface PokemonResponse {
-  count: null | number;
-  next: string;
-  previous: null | number;
-  results: Pokemon[];
-}
-
-export type Pokemon = {
+export type PokemonURL = {
   url: string;
   name: string;
+};
+
+export type Pokemon = {
+  name: string;
+  sprites: {
+    front_default: 'string';
+  };
+  height: number;
+  weight: number;
 };
