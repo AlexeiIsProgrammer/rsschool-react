@@ -1,29 +1,38 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { FormState } from '../types/interfaces';
+import { FormState, FormValues } from '../types/interfaces';
 
 const initialState: FormState = {
-  name: '',
-  age: 0,
-  email: '',
-  password: '',
-  repeatPassword: '',
-  gender: 'male',
-  picture: '',
-  privacy: false,
+  form: {
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+    repeatPassword: '',
+    gender: 'male',
+    picture: '',
+    privacy: false,
+  },
 };
 
 export const reactHookFormSlice = createSlice({
   name: 'reactHookForm',
   initialState,
   reducers: {
-    clearReactHookFormValues(state, action: PayloadAction<FormState>) {
-      if (action) {
-        state = action.payload;
-      }
+    clearReactHookFormValues(state) {
+      state.form = {
+        name: '',
+        age: 0,
+        email: '',
+        password: '',
+        repeatPassword: '',
+        gender: 'male',
+        picture: '',
+        privacy: false,
+      };
     },
-    setReactHookFormValues(state, action: PayloadAction<FormState>) {
+    setReactHookFormValues(state, action: PayloadAction<FormValues>) {
       if (action) {
-        state = action.payload;
+        state.form = action.payload;
       }
     },
   },

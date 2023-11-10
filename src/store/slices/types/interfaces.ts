@@ -1,10 +1,14 @@
-export interface FormState {
+export interface FormValues {
   name: string;
   age: number;
   email: string;
   password: string;
   repeatPassword: string;
-  gender: 'male' | 'female' | 'pokemon';
+  gender: string;
   picture: string;
   privacy: boolean;
+}
+
+export interface FormState {
+  form: FormValues;
 }

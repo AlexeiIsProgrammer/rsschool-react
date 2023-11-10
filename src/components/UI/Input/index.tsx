@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-export default function Input({ ...props }) {
-  return <input {...props} />;
-}
+const Input = forwardRef<HTMLInputElement>((props, ref) => {
+  return <input {...props} ref={ref} />;
+});
+
+export default Input;

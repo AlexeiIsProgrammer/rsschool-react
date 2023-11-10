@@ -1,29 +1,38 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { FormState } from '../types/interfaces';
+import { FormState, FormValues } from '../types/interfaces';
 
 const initialState: FormState = {
-  name: '',
-  age: 0,
-  email: '',
-  password: '',
-  repeatPassword: '',
-  gender: 'male',
-  picture: '',
-  privacy: false,
+  form: {
+    name: '',
+    age: 0,
+    email: '',
+    password: '',
+    repeatPassword: '',
+    gender: 'male',
+    picture: '',
+    privacy: false,
+  },
 };
 
 export const uncontrolledSlice = createSlice({
   name: 'uncontrolled',
   initialState,
   reducers: {
-    clearUncontrolledValues(state, action: PayloadAction<FormState>) {
-      if (action) {
-        state = action.payload;
-      }
+    clearUncontrolledValues(state) {
+      state.form = {
+        name: '',
+        age: 0,
+        email: '',
+        password: '',
+        repeatPassword: '',
+        gender: 'male',
+        picture: '',
+        privacy: false,
+      };
     },
-    setUncontrolledValues(state, action: PayloadAction<FormState>) {
+    setUncontrolledValues(state, action: PayloadAction<FormValues>) {
       if (action) {
-        state = action.payload;
+        state.form = action.payload;
       }
     },
   },
