@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import PokemonsAPI from '../../API/Pokemons';
 
 import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
@@ -12,11 +11,10 @@ import PokemonsList from '../PokemonsList';
 import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
+import { useFetchedPokemons } from '../../hooks/useFetchedPokemons';
 
 function Searching() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const { pokemons, setPokemons, query, setQuery } = useContext(Context);
+  const { query, setQuery, pokemons } = useContext(Context);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -24,25 +22,8 @@ function Searching() {
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
-  const [totalPages, setTotalPages] = useState(0);
 
-  const fetchPokemons = async () => {
-    setLoading(true);
-    setError('');
-
-    const pokemonsResponse = await PokemonsAPI.getPokemons(page, offset, query);
-
-    if (pokemonsResponse) {
-      if (pokemonsResponse instanceof Error) {
-        setError(pokemonsResponse.message);
-      } else {
-        setPokemons(pokemonsResponse.items);
-        setTotalPages(pokemonsResponse.meta.total_pages);
-      }
-    }
-
-    setLoading(false);
-  };
+  const { loading, error, totalPages } = useFetchedPokemons(offset, page);
 
   const inputRangeHandle = (e: React.FormEvent<HTMLInputElement> | number) => {
     setPage(1);
@@ -62,12 +43,7 @@ function Searching() {
   }, []);
 
   useEffect(() => {
-    fetchPokemons();
-  }, [offset, query, page]);
-
-  useEffect(() => {
-    searchParams.set('page', page.toString());
-    setSearchParams(searchParams);
+    setSearchParams({ page: page.toString() });
   }, [page]);
 
   useEffect(() => {

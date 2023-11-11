@@ -1,7 +1,9 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es6: true,
+    jest: true,
+    node: true,
   },
   extends: [
     'airbnb',
@@ -24,6 +26,9 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
     ecmaVersion: 'latest',
     sourceType: 'module',
     project: './tsconfig.json',
@@ -52,5 +57,6 @@ module.exports = {
     'import/no-cycle': 'off',
     'react/jsx-no-constructed-context-values': 'off',
     'no-nested-ternary': 'off',
+    'no-restricted-globals': 'off',
   },
 };

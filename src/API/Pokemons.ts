@@ -12,7 +12,7 @@ export default class PokemonsAPI {
     name: string = ''
   ): Promise<PokemonsResponse | Error | undefined> {
     try {
-      const response = await axios.get(this.customURL, {
+      const response = await axios.get<PokemonsResponse>(this.customURL, {
         params: {
           limit,
           page,

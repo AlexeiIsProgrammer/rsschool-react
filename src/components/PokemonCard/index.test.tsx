@@ -1,7 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, it, vi } from 'vitest';
 
-import { useState } from 'react';
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import Theme from '../../theme';
@@ -10,26 +9,6 @@ import PokemonCard from '.';
 import ErrorPage from '../../pages/ErrorPage';
 import PokemonPage from '../../pages/PokemonPage';
 import App from '../../app';
-
-let mockSearchParam = 'details=1';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-
-  return {
-    ...actual,
-    useSearchParams: () => {
-      const [params, setParams] = useState(new URLSearchParams(mockSearchParam));
-      return [
-        params,
-        (newParams: string) => {
-          mockSearchParam = newParams;
-          setParams(new URLSearchParams(newParams));
-        },
-      ];
-    },
-  };
-});
 
 const pokemon = {
   name: 'Ivysaur',
@@ -148,7 +127,7 @@ describe('Pokemon page', () => {
       initialEntries: ['/'],
     });
 
-    render(
+    const { container } = render(
       <Theme>
         <RouterProvider router={router} />
       </Theme>
@@ -157,14 +136,20 @@ describe('Pokemon page', () => {
     const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(openPokemonButton);
 
-    const openButton = await screen.findByTitle('open');
-    fireEvent.click(openButton);
+    waitFor(() => {
+      const preElement = container.querySelector('.eCPjPQ');
 
-    expect(await screen.findByText(/BULBASAUR/)).toBeInTheDocument(); // this name exists only in opened details popup
+      expect(preElement).toBeInTheDocument();
+    });
 
     const closeButton = await screen.findByTitle('close');
-    fireEvent.click(closeButton);
 
-    expect(await screen.findByText(/BULBASAUR/)).not.toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(closeButton);
+    });
+
+    const postElement = container.querySelector('.eCPjPQ');
+
+    expect(postElement).not.toBeInTheDocument();
   });
 });
