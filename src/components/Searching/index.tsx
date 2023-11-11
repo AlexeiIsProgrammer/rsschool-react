@@ -91,7 +91,7 @@ function Searching() {
       content = (
         <>
           <SearchingSizeContainer>
-            <PokemonsList offset={offset} page={page} />
+            <PokemonsList offset={offset} />
           </SearchingSizeContainer>
           <Pagination setPage={setPage} page={page} total_pages={totalPages} />
         </>

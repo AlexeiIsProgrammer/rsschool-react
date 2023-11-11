@@ -1,60 +1,103 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { useState } from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import Pokemon from '.';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { Context } from '../../context';
+import ErrorPage from '../../pages/ErrorPage';
+import PokemonPage from '../../pages/PokemonPage';
 import Theme from '../../theme';
-
-let mockSearchParam = '';
-
-vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router-dom');
-
-  return {
-    ...actual,
-    useSearchParams: () => {
-      const [params, setParams] = useState(new URLSearchParams(mockSearchParam));
-      return [
-        params,
-        (newParams: string) => {
-          mockSearchParam = newParams;
-          setParams(new URLSearchParams(newParams));
-        },
-      ];
-    },
-  };
-});
-
-function Wrapper() {
-  return (
-    <Theme>
-      <MemoryRouter>
-        <Pokemon pokemon={{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }} />
-      </MemoryRouter>
-    </Theme>
-  );
-}
+import Searching from '../Searching';
 
 describe('Pokemon', () => {
-  it('Ensure that the card component renders the relevant card data', () => {
-    render(<Wrapper />);
+  const pokemon = {
+    name: 'Ivysaur',
+    sprites: {
+      front_default: '',
+    },
+    height: 200,
+    weight: 100,
+  };
 
-    const name = screen.getByText('bulbasaur');
-    expect(name).toBeInTheDocument();
+  global.fetch = vi.fn(() =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          data: { pokemon },
+        }),
+    })
+  ) as unknown as typeof global.fetch;
+
+  const routes = [
+    {
+      path: '/',
+      element: (
+        <Context.Provider
+          value={{
+            pokemons: [{ name: 'Ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' }],
+            query: '',
+            setQuery: () => {},
+            setPokemons: () => {},
+          }}
+        >
+          <Searching />
+        </Context.Provider>
+      ),
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: 'search/:pokemonId',
+          element: <PokemonPage />,
+        },
+      ],
+    },
+  ];
+
+  const router = createMemoryRouter(routes, {
+    initialEntries: ['/'],
+  });
+
+  beforeEach(async () => {
+    render(
+      <Theme>
+        <RouterProvider router={router} />
+      </Theme>
+    );
+  });
+
+  it('Ensure that the card component renders the relevant card data', async () => {
+    expect(await screen.findByText('Ivysaur')).toHaveTextContent('Ivysaur');
+    expect(await screen.findByRole('link')).toHaveAttribute('href', '/search/2?details=1&page=1');
   });
 
   it('Validate that clicking on a card opens a detailed card component', async () => {
-    render(<Wrapper />);
+    const { container } = render(
+      <Theme>
+        <RouterProvider router={router} />
+      </Theme>
+    );
+
+    await waitFor(() => {
+      const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
+
+      expect(detailedInfo).not.toBeInTheDocument();
+    });
 
     const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(button);
+
+    await waitFor(() => {
+      const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
+
+      expect(detailedInfo).toBeInTheDocument();
+    });
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    render(<Wrapper />);
-
     const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(button);
+
+    waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+    });
   });
 });
