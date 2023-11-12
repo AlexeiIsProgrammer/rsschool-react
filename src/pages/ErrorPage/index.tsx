@@ -8,7 +8,7 @@ export default function ErrorPage() {
   return (
     <ErrorWrapper>
       <ErrorTitle>Oops!</ErrorTitle>
-      <ErrorDescription>{error.statusText || error.message}</ErrorDescription>
+      <ErrorDescription>{error?.statusText || error?.message || ''}</ErrorDescription>
     </ErrorWrapper>
   );
 }

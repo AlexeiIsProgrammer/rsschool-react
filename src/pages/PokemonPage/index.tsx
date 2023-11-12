@@ -1,20 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { AiFillCaretLeft } from 'react-icons/ai';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { AiFillCaretLeft, AiFillCloseCircle } from 'react-icons/ai';
-import Spinner from '../../components/Spinner';
 import Alert from '../../components/Alert';
-import {
-  PokemonDetails,
-  PokemonDetailsClose,
-  PokemonDetailsOpen,
-  PokemonDetailsWrapper,
-  PokemonImage,
-  PokemonName,
-} from './styles';
+import { PokemonDetailsOpen, PokemonDetailsWrapper } from './styles';
 import { useGetPokemonQuery } from '../../services/PokemonAPI';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { pokemonSelector } from '../../store/selectors/PokemonSelector';
 import { setIsImage } from '../../store/slices/PokemonSlice';
+import PokemonCard from '../../components/PokemonCard';
 
 export default function PokemonPage() {
   const { pokemonId } = useParams();
@@ -48,13 +41,6 @@ export default function PokemonPage() {
     if (searchParams.get('details') === '0') setIsClosed(true);
   }, [searchParams]);
 
-  const closeModalHandle = () => {
-    searchParams.set('details', '0');
-    setSearchParams(searchParams);
-
-    setIsClosed(true);
-  };
-
   const openModalHandle = () => {
     searchParams.set('details', '1');
     setSearchParams(searchParams);
@@ -72,35 +58,14 @@ export default function PokemonPage() {
     );
   }
 
-  const PokemonDetailsComponent = React.memo(() => (
-    <PokemonDetails>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          <PokemonName>{data.name.toUpperCase()}</PokemonName>
-          <PokemonName>Height: {data.height}</PokemonName>
-          <PokemonName>Weight: {data.weight}</PokemonName>
-          <PokemonImage src={data.sprites.front_default} alt="pokich" />
-        </>
-      )}
-    </PokemonDetails>
-  ));
-
   return (
     <PokemonDetailsWrapper $isClosed={isClosed}>
-      {isClosed && (
-        <PokemonDetailsOpen onClick={openModalHandle}>
-          <AiFillCaretLeft color="white" />
+      {isClosed ? (
+        <PokemonDetailsOpen title="open" onClick={openModalHandle}>
+          <AiFillCaretLeft />
         </PokemonDetailsOpen>
-      )}
-      {!isClosed && (
-        <>
-          <PokemonDetailsClose onClick={closeModalHandle}>
-            <AiFillCloseCircle color="white" />
-          </PokemonDetailsClose>
-          <PokemonDetailsComponent />
-        </>
+      ) : (
+        <PokemonCard pokemon={data} loading={isLoading} />
       )}
     </PokemonDetailsWrapper>
   );

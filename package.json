@@ -26,13 +26,13 @@
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.17.0",
     "redux-persist": "^6.0.0",
-    "sass": "^1.69.5",
     "styled-components": "^6.1.0",
     "use-debounce": "^9.0.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.3",
     "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.5.1",
     "@types/enzyme": "^3.10.15",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
@@ -52,9 +52,10 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "gh-pages": "^6.0.0",
     "husky": "^8.0.0",
+    "jsdom": "^22.1.0",
     "lint-staged": "^15.0.2",
-    "msw": "^2.0.1",
     "prettier": "^3.0.3",
+    "sass": "^1.69.5",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
     "vitest": "^0.34.6"
@@ -64,5 +65,8 @@
       "eslint . --fix",
       "prettier --write ."
     ]
+  },
+  "msw": {
+    "workerDirectory": ""
   }
 }

@@ -4,25 +4,24 @@ import { useSearchParams } from 'react-router-dom';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
+import InputRange from '../InputRange';
 import Pagination from '../Pagination';
 import PokemonsList from '../PokemonsList';
+import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 
 import { useGetPokemonsQuery } from '../../services/PokemonAPI';
-import SearchInput from '../SearchInput';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { searchSelector } from '../../store/selectors/SearchSelector';
 import { setPageItems } from '../../store/slices/SearchSlice';
-
-import InputRange from '../InputRange';
 
 function Searching() {
   const dispatch = useAppDispatch();
   const { query, itemsPerPage } = useAppSelector(searchSelector);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const pageParam = +(searchParams.get('page') || 1) - 1;
+  const pageParam = +(searchParams.get('page') || 1);
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
