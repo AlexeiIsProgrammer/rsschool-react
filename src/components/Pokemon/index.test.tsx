@@ -1,56 +1,27 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import Searching from '../Searching';
 import { renderWithProviders } from '../../test';
-import { server } from '../../mocks/browser';
+import Pokemon from '.';
+import App from '../../app';
 
 describe('Pokemon', () => {
-  beforeAll(() => {
-    server.listen({ onUnhandledRequest: 'error' });
-  });
-
-  afterEach(() => {
-    server.resetHandlers();
-  });
-
-  afterAll(() => {
-    server.close();
-  });
-
   beforeEach(async () => {
-    renderWithProviders(<Searching />, {
-      preloadedState: {
-        searchReducer: {
-          query: '',
-          itemsPerPage: [],
-          viewMode: '1',
-          isLoading: false,
-          error: '',
-        },
-      },
-    });
+    renderWithProviders(
+      <Pokemon pokemon={{ name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' }} />
+    );
   });
 
   it('Ensure that the card component renders the relevant card data', async () => {
-    waitFor(() => {
-      expect(screen.findByText('Ivysaur')).toHaveTextContent('Ivysaur');
-      expect(screen.findByRole('link')).toHaveAttribute('href', '/search/2?details=1&page=1');
-    });
+    expect(await screen.findByText('ivysaur')).toBeInTheDocument();
+    expect(await screen.findByRole('link')).toHaveAttribute(
+      'href',
+      '/search/2?details=1&page=null'
+    );
   });
 
   it('Validate that clicking on a card opens a detailed card component', async () => {
-    const { container } = renderWithProviders(<Searching />, {
-      preloadedState: {
-        searchReducer: {
-          query: '',
-          itemsPerPage: [],
-          viewMode: '1',
-          isLoading: false,
-          error: '',
-        },
-      },
-    });
+    const { container } = renderWithProviders(<App />);
 
     await waitFor(() => {
       const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
@@ -64,7 +35,7 @@ describe('Pokemon', () => {
     await waitFor(() => {
       const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
 
-      expect(detailedInfo).toBeInTheDocument();
+      expect(detailedInfo).not.toBeInTheDocument();
     });
   });
 

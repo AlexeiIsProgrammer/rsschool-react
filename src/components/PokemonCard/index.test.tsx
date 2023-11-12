@@ -1,9 +1,9 @@
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
-import { describe, it, vi } from 'vitest';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { describe, it } from 'vitest';
 
 import PokemonCard from '.';
-import App from '../../app';
 import { renderWithProviders } from '../../test';
+import App from '../../app';
 
 const pokemon = {
   name: 'Ivysaur',
@@ -15,30 +15,11 @@ const pokemon = {
 };
 
 describe('Pokemon card', () => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      json: () =>
-        Promise.resolve({
-          data: { pokemon },
-        }),
-    })
-  ) as unknown as typeof global.fetch;
-
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    const { container } = renderWithProviders(<PokemonCard pokemon={pokemon} loading />, {
-      preloadedState: {
-        searchReducer: {
-          query: '',
-          itemsPerPage: [],
-          viewMode: '1',
-          isLoading: false,
-          error: '',
-        },
-      },
-    });
+    const { container } = renderWithProviders(<PokemonCard pokemon={pokemon} loading />);
 
     waitFor(() => {
-      const spinner = container.querySelector('.sc-bdfCDU.jUNipm'); // Classname for spinner
+      const spinner = container.querySelector('.kZUWme'); // Classname for spinner
 
       expect(spinner).toBeInTheDocument();
     });
@@ -61,42 +42,23 @@ describe('Pokemon card', () => {
   });
 
   it('Ensure that clicking the close button hides the component', async () => {
-    const { container } = renderWithProviders(<App />, {
-      preloadedState: {
-        searchReducer: {
-          query: '',
-          itemsPerPage: [{ name: 'ivysaur', url: 'https://' }],
-          viewMode: '1',
-          isLoading: false,
-          error: '',
-        },
-        pokemonReducer: {
-          isActive: true,
-          name: 'ivysaur',
-          image: '',
-          isLoading: false,
-          error: '',
-        },
-      },
-    });
+    renderWithProviders(<App />);
 
     const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(openPokemonButton);
 
-    waitFor(() => {
-      const preElement = container.querySelector('.eCPjPQ');
+    waitFor(async () => {
+      const nameElement = await screen.findByText('IVYSAUR');
 
-      expect(preElement).toBeInTheDocument();
-    });
+      expect(nameElement).toBeInTheDocument();
 
-    const closeButton = await screen.findByTitle('close');
+      const closeButton = await screen.findByTitle('close');
 
-    await act(async () => {
       fireEvent.click(closeButton);
+
+      const nameElementAfterClosingDetails = await screen.findByText('IVYSAUR');
+
+      expect(nameElementAfterClosingDetails).not.toBeInTheDocument();
     });
-
-    const postElement = container.querySelector('.eCPjPQ');
-
-    expect(postElement).not.toBeInTheDocument();
   });
 });

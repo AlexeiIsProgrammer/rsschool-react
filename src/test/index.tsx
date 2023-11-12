@@ -3,9 +3,8 @@ import { RenderOptions, render, renderHook } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { PersistGate } from 'redux-persist/integration/react';
 import type { AppStore, RootState } from '../store';
-import { persistor, setupStore } from '../store';
+import { setupStore } from '../store';
 import Theme from '../theme';
 
 const defaultState: PreloadedState<RootState> = {
@@ -35,9 +34,7 @@ export function renderWithProviders(
     return (
       <Theme>
         <Provider store={store}>
-          <PersistGate persistor={persistor}>
-            <MemoryRouter>{children}</MemoryRouter>
-          </PersistGate>
+          <MemoryRouter>{children}</MemoryRouter>
         </Provider>
       </Theme>
     );
@@ -58,9 +55,7 @@ export function renderHookWithProviders<Result, Props = undefined>(
     return (
       <Theme>
         <Provider store={store}>
-          <PersistGate persistor={persistor}>
-            <MemoryRouter>{children}</MemoryRouter>
-          </PersistGate>
+          <MemoryRouter>{children}</MemoryRouter>
         </Provider>
       </Theme>
     );
