@@ -1,5 +1,5 @@
 import { createRef } from 'react';
-import { number, object, string, ObjectSchema, boolean, ref } from 'yup';
+import { number, object, string, ObjectSchema, boolean, ref, mixed } from 'yup';
 import Input from '../../components/UI/Input';
 import Select from '../../components/UI/Select';
 import { useAppDispatch } from '../../hooks';
@@ -18,6 +18,8 @@ export default function UncontrolledPage() {
   const privacyRef = createRef<HTMLInputElement>();
 
   const dispatch = useAppDispatch();
+
+  const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg'];
 
   const schema: ObjectSchema<FormValues> = object({
     name: string()
@@ -45,12 +47,16 @@ export default function UncontrolledPage() {
       ),
     repeatPassword: string().oneOf([ref('password')], 'Passwords must match'),
     gender: string().nullable().required(),
-    picture: string()
-      .required()
-      .test('test extension', 'val', (val) => {
-        return ['png', 'jpeg'].includes(val.split('.').at(-1) || '');
-      }),
     privacy: boolean(),
+  }).shape({
+    picture: mixed()
+      .required('A file is required')
+      .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+      .test(
+        'fileFormat',
+        'Unsupported Format',
+        (value) => value && SUPPORTED_FORMATS.includes(value.type)
+      ),
   });
 
   const formSubmitHandle = async () => {

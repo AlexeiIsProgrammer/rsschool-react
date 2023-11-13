@@ -1,6 +1,6 @@
-import React, { forwardRef } from 'react';
+import React, { InputHTMLAttributes, forwardRef } from 'react';
 
-const Input = forwardRef<HTMLInputElement>((props, ref) => {
+const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>((props, ref) => {
   return <input {...props} ref={ref} />;
 });
 
