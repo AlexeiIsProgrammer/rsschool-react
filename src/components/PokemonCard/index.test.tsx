@@ -77,17 +77,13 @@ describe('Pokemon page', () => {
       initialEntries: ['/'],
     });
 
-    const { container } = render(
+    render(
       <Theme>
         <RouterProvider router={router} />
       </Theme>
     );
 
-    waitFor(() => {
-      const spinner = container.querySelector('.sc-bdfCDU.jUNipm'); // Classname for spinner
-
-      expect(spinner).toBeInTheDocument();
-    });
+    expect(await screen.getByTitle('spinner')).toBeInTheDocument();
   });
 
   it('Make sure the detailed card component correctly displays the detailed card data', async () => {
@@ -127,7 +123,7 @@ describe('Pokemon page', () => {
       initialEntries: ['/'],
     });
 
-    const { container } = render(
+    render(
       <Theme>
         <RouterProvider router={router} />
       </Theme>
@@ -136,11 +132,9 @@ describe('Pokemon page', () => {
     const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(openPokemonButton);
 
-    waitFor(() => {
-      const preElement = container.querySelector('.eCPjPQ');
+    const preElement = await screen.findByText(/BULBASAUR/);
 
-      expect(preElement).toBeInTheDocument();
-    });
+    expect(preElement).toBeInTheDocument();
 
     const closeButton = await screen.findByTitle('close');
 
@@ -148,8 +142,10 @@ describe('Pokemon page', () => {
       fireEvent.click(closeButton);
     });
 
-    const postElement = container.querySelector('.eCPjPQ');
+    waitFor(async () => {
+      const postElement = await screen.findByText(/BULBASAUR/);
 
-    expect(postElement).not.toBeInTheDocument();
+      expect(postElement).not.toBeInTheDocument();
+    });
   });
 });
