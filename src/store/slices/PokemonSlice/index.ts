@@ -18,21 +18,15 @@ export const pokemonSlice = createSlice({
       state,
       action: PayloadAction<{ name: string; image: string; isActive: boolean }>
     ) {
-      if (action) {
-        state.name = action.payload.name;
-        state.image = action.payload.image;
-        state.isActive = action.payload.isActive;
-      }
+      state.name = action.payload.name;
+      state.image = action.payload.image;
+      state.isActive = action.payload.isActive;
     },
     setIsActive(state, action: PayloadAction<boolean>) {
-      if (action) {
-        state.isActive = action.payload;
-      }
+      state.isActive = action.payload;
     },
     setIsImage(state, action: PayloadAction<string>) {
-      if (action) {
-        state.image = action.payload;
-      }
+      state.image = action.payload;
     },
   },
 });
