@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Pokemon, PokemonsResponse } from './types/interfaces';
 
 export default class PokemonsAPI {
@@ -12,14 +11,10 @@ export default class PokemonsAPI {
     name: string = ''
   ): Promise<PokemonsResponse | Error | undefined> {
     try {
-      const response = await axios.get<PokemonsResponse>(this.customURL, {
-        params: {
-          limit,
-          page,
-          name: `*${name}`,
-        },
-      });
-      return response.data;
+      const response = await fetch(`${this.customURL}?limit=${limit}&page=${page}&name=*${name}`);
+      const data: PokemonsResponse = await response.json();
+
+      return data;
     } catch (e) {
       if (e instanceof Error) {
         return e;
@@ -29,8 +24,10 @@ export default class PokemonsAPI {
 
   static async getOnePokemon(id: string): Promise<Pokemon | Error | undefined> {
     try {
-      const response = await axios.get(`${this.baseURL}${id}`);
-      return response.data;
+      const response = await fetch(`${this.baseURL}${id}`);
+      const data: Pokemon = await response.json();
+
+      return data;
     } catch (e) {
       if (e instanceof Error) {
         return e;

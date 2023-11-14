@@ -18,14 +18,20 @@ describe('Pokemon', () => {
     weight: 100,
   };
 
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      json: () =>
-        Promise.resolve({
-          data: { pokemon },
-        }),
-    })
-  ) as unknown as typeof global.fetch;
+  const pokemonList = {
+    meta: {
+      total_pages: 2,
+    },
+    items: [{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }],
+  };
+
+  const fakeFetch: typeof fetch = async () => {
+    return { json: async () => pokemonList } as Response;
+  };
+
+  const fakePokemonFetch: typeof fetch = async () => {
+    return { json: async () => pokemon } as Response;
+  };
 
   const routes = [
     {
@@ -33,7 +39,7 @@ describe('Pokemon', () => {
       element: (
         <Context.Provider
           value={{
-            pokemons: [{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' }],
+            pokemons: [{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }],
             query: '',
             setQuery: () => {},
             setPokemons: () => {},
@@ -56,20 +62,22 @@ describe('Pokemon', () => {
     initialEntries: ['/'],
   });
 
-  beforeEach(async () => {
+  it('Ensure that the card component renders the relevant card data', async () => {
+    vi.spyOn(window, 'fetch').mockImplementation(fakeFetch);
+
     render(
       <Theme>
         <RouterProvider router={router} />
       </Theme>
     );
-  });
 
-  it('Ensure that the card component renders the relevant card data', async () => {
     expect(await screen.findByText('bulbasaur')).toHaveTextContent('bulbasaur');
     expect(await screen.findByRole('link')).toHaveAttribute('href', '/search/1?details=1&page=1');
   });
 
   it('Validate that clicking on a card opens a detailed card component', async () => {
+    vi.spyOn(window, 'fetch').mockImplementation(fakeFetch);
+
     render(
       <Theme>
         <RouterProvider router={router} />
@@ -77,27 +85,29 @@ describe('Pokemon', () => {
     );
 
     waitFor(async () => {
-      const detailedInfo = await screen.findByText(/BULBASAUR/);
+      const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
+      fireEvent.click(button);
+      const detailedInfoAfter = await screen.findByText(/BULBASAUR/);
 
-      expect(detailedInfo).not.toBeInTheDocument();
-    });
-
-    const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
-    fireEvent.click(button);
-
-    await waitFor(async () => {
-      const detailedInfo = await screen.findByText(/BULBASAUR/);
-
-      expect(detailedInfo).toBeInTheDocument();
+      expect(detailedInfoAfter).toBeInTheDocument();
     });
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
-    fireEvent.click(button);
+    vi.spyOn(window, 'fetch')
+      .mockImplementationOnce(fakeFetch)
+      .mockImplementationOnce(fakePokemonFetch);
 
-    waitFor(() => {
-      expect(fetch).toHaveBeenCalled();
+    render(
+      <Theme>
+        <RouterProvider router={router} />
+      </Theme>
+    );
+    waitFor(async () => {
+      const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
+      fireEvent.click(button);
+
+      expect(fakeFetch).toBeCalled();
     });
   });
 });

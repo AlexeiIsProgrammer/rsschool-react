@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, vi } from 'vitest';
 
 import { RouterProvider, createMemoryRouter } from 'react-router-dom';
@@ -10,24 +10,34 @@ import ErrorPage from '../../pages/ErrorPage';
 import PokemonPage from '../../pages/PokemonPage';
 import App from '../../app';
 
-const pokemon = {
-  name: 'Ivysaur',
-  sprites: {
-    front_default: '',
-  },
-  height: 200,
-  weight: 100,
-};
-
 describe('Pokemon page', () => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      json: () =>
-        Promise.resolve({
-          data: { pokemon },
-        }),
-    })
-  ) as unknown as typeof global.fetch;
+  const pokemon = {
+    name: 'Ivysaur',
+    sprites: {
+      front_default: '',
+    },
+    height: 200,
+    weight: 100,
+  };
+
+  const pokemonList = {
+    meta: {
+      total_pages: 2,
+    },
+    items: [{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }],
+  };
+
+  const fakeFetch: typeof fetch = async () => {
+    return { json: async () => pokemonList } as Response;
+  };
+
+  const fakePokemonFetch: typeof fetch = async () => {
+    return { json: async () => pokemon } as Response;
+  };
+
+  vi.spyOn(window, 'fetch')
+    .mockImplementationOnce(fakeFetch)
+    .mockImplementationOnce(fakePokemonFetch);
 
   const globalRoutes = [
     {
@@ -132,20 +142,16 @@ describe('Pokemon page', () => {
     const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
     fireEvent.click(openPokemonButton);
 
-    const preElement = await screen.findByText(/BULBASAUR/);
+    const preElement = await screen.findByText(/IVYSAUR/);
 
     expect(preElement).toBeInTheDocument();
 
     const closeButton = await screen.findByTitle('close');
 
-    await act(async () => {
-      fireEvent.click(closeButton);
-    });
+    fireEvent.click(closeButton);
 
-    waitFor(async () => {
-      const postElement = await screen.findByText(/BULBASAUR/);
+    const openButton = await screen.findByTitle('open');
 
-      expect(postElement).not.toBeInTheDocument();
-    });
+    expect(openButton).toBeInTheDocument();
   });
 });
