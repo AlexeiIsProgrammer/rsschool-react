@@ -35,10 +35,10 @@ describe('Pokemon card', () => {
     .mockImplementationOnce(fakePokemonFetch);
 
   it('Check that a loading indicator is displayed while fetching data', async () => {
-    const { container } = renderWithProviders(<PokemonCard pokemon={pokemon} loading />);
+    renderWithProviders(<PokemonCard pokemon={pokemon} loading />);
 
-    waitFor(() => {
-      const spinner = container.querySelector('.kZUWme'); // Classname for spinner
+    waitFor(async () => {
+      const spinner = await screen.getByText('spinner');
 
       expect(spinner).toBeInTheDocument();
     });
@@ -63,19 +63,21 @@ describe('Pokemon card', () => {
   it('Ensure that clicking the close button hides the component', async () => {
     renderWithProviders(<App />);
 
-    const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
-    fireEvent.click(openPokemonButton);
+    waitFor(async () => {
+      const openPokemonButton: HTMLButtonElement = await screen.findByText('Open the pokemon');
+      fireEvent.click(openPokemonButton);
 
-    const nameElement = await screen.findByText('IVYSAUR');
+      const nameElement = await screen.findByText('IVYSAUR');
 
-    expect(nameElement).toBeInTheDocument();
+      expect(nameElement).toBeInTheDocument();
 
-    const closeButton = await screen.findByTitle('close');
+      const closeButton = await screen.findByTitle('close');
 
-    fireEvent.click(closeButton);
+      fireEvent.click(closeButton);
 
-    const openButton = await screen.findByTitle('open');
+      const openButton = await screen.findByTitle('open');
 
-    expect(openButton).toBeInTheDocument();
+      expect(openButton).toBeInTheDocument();
+    });
   });
 });

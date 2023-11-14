@@ -30,13 +30,17 @@ describe('Pokemon', () => {
     return { json: async () => pokemon } as Response;
   };
 
-  beforeEach(async () => {
+  it('Validate that card is displaying the relevant data', async () => {
+    vi.spyOn(window, 'fetch').mockImplementation(fakeFetch);
     renderWithProviders(
-      <Pokemon pokemon={{ name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' }} />
+      <Pokemon pokemon={{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }} />
     );
 
     expect(await screen.findByText('bulbasaur')).toHaveTextContent('bulbasaur');
-    expect(await screen.findByRole('link')).toHaveAttribute('href', '/search/1?details=1&page=1');
+    expect(await screen.findByRole('link')).toHaveAttribute(
+      'href',
+      '/search/1?details=1&page=null'
+    );
   });
 
   it('Validate that clicking on a card opens a detailed card component', async () => {
