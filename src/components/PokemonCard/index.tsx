@@ -16,7 +16,7 @@ function PokemonCard({ pokemon, loading }: PokemonCardProps) {
 
   return (
     <>
-      <PokemonDetailsClose onClick={closeModalHandle}>
+      <PokemonDetailsClose title="close" onClick={closeModalHandle}>
         <AiFillCloseCircle color="white" />
       </PokemonDetailsClose>
 
@@ -28,7 +28,7 @@ function PokemonCard({ pokemon, loading }: PokemonCardProps) {
             <PokemonName>{pokemon.name.toUpperCase()}</PokemonName>
             <PokemonName>Height: {pokemon.height}</PokemonName>
             <PokemonName>Weight: {pokemon.weight}</PokemonName>
-            <PokemonImage src={pokemon.sprites.front_default} alt="pokich" />
+            <PokemonImage src={pokemon.sprites.front_default} alt={pokemon.name} />
           </>
         )}
       </PokemonDetails>

@@ -11,13 +11,16 @@
     "lint-fix": "eslint . --ext ts,tsx --fix",
     "preview": "vite preview",
     "test": "vitest",
+    "test-push": "vitest run",
     "coverage": "vitest run --coverage",
     "prepare": "husky install",
     "deploy": "gh-pages -d dist",
     "format:fix": "prettier --write ."
   },
   "dependencies": {
+    "@testing-library/user-event": "^14.5.1",
     "axios": "^1.5.1",
+    "history": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
@@ -28,11 +31,14 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.3",
     "@testing-library/react": "^14.0.0",
+    "@types/enzyme": "^3.10.15",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
     "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-v8": "^0.34.6",
+    "axios-mock-adapter": "^1.22.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -45,6 +51,7 @@
     "eslint-plugin-react-refresh": "^0.4.3",
     "gh-pages": "^6.0.0",
     "husky": "^8.0.0",
+    "jsdom": "^22.1.0",
     "lint-staged": "^15.0.2",
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
@@ -57,5 +64,8 @@
       "eslint . --fix",
       "prettier --write ."
     ]
+  },
+  "msw": {
+    "workerDirectory": ""
   }
 }

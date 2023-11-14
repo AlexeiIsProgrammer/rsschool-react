@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import PokemonsAPI from '../../API/Pokemons';
-import { PokemonURL } from '../../API/types/interfaces';
+
+import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
@@ -11,12 +11,10 @@ import PokemonsList from '../PokemonsList';
 import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
+import { useFetchedPokemons } from '../../hooks/useFetchedPokemons';
 
 function Searching() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-
-  const [pokemons, setPokemons] = useState<PokemonURL[]>([]);
+  const { query, setQuery, pokemons } = useContext(Context);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -24,27 +22,8 @@ function Searching() {
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
-  const [totalPages, setTotalPages] = useState(0);
 
-  const [query, setQuery] = useState<string>('');
-
-  const fetchPokemons = async () => {
-    setLoading(true);
-    setError('');
-
-    const pokemonsResponse = await PokemonsAPI.getPokemons(page, offset, query);
-
-    if (pokemonsResponse) {
-      if (pokemonsResponse instanceof Error) {
-        setError(pokemonsResponse.message);
-      } else {
-        setPokemons(pokemonsResponse.items);
-        setTotalPages(pokemonsResponse.meta.total_pages);
-      }
-    }
-
-    setLoading(false);
-  };
+  const { loading, error, totalPages } = useFetchedPokemons(offset, page);
 
   const inputRangeHandle = (e: React.FormEvent<HTMLInputElement> | number) => {
     setPage(1);
@@ -64,12 +43,7 @@ function Searching() {
   }, []);
 
   useEffect(() => {
-    fetchPokemons();
-  }, [offset, query, page]);
-
-  useEffect(() => {
-    searchParams.set('page', page.toString());
-    setSearchParams(searchParams);
+    setSearchParams({ page: page.toString() });
   }, [page]);
 
   useEffect(() => {
@@ -93,7 +67,7 @@ function Searching() {
       content = (
         <>
           <SearchingSizeContainer>
-            <PokemonsList offset={offset} pokemons={pokemons} />
+            <PokemonsList offset={offset} />
           </SearchingSizeContainer>
           <Pagination setPage={setPage} page={page} total_pages={totalPages} />
         </>
@@ -111,7 +85,7 @@ function Searching() {
       }}
     >
       <ContainerWrapper>
-        <SearchInput setQuery={(val: string) => setQuery(val)} />
+        <SearchInput />
 
         <InputRange value={offset} count={totalPages} onChange={inputRangeHandle} />
 

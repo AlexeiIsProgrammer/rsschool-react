@@ -1,9 +1,13 @@
+import { useContext } from 'react';
 import { ContainerWrapper, SearchingList } from '../../styles';
 import Pokemon from '../Pokemon';
-import { PokemonsListProps } from './types/types';
 import Alert from '../Alert';
+import { Context } from '../../context';
+import { PokemonsListProps } from './types/types';
 
-export default function PokemonsList({ pokemons, offset }: PokemonsListProps) {
+export default function PokemonsList({ offset }: PokemonsListProps) {
+  const { pokemons } = useContext(Context);
+
   return (
     <ContainerWrapper>
       {pokemons.length === 0 ? (

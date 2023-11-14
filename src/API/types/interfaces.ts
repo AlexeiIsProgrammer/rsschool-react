@@ -13,7 +13,7 @@ export type PokemonURL = {
 export type Pokemon = {
   name: string;
   sprites: {
-    front_default: 'string';
+    front_default: string;
   };
   height: number;
   weight: number;

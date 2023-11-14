@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button } from '../../styles';
 import { Search, SearchInputWrapper } from './styles';
-import { SearchInputProps } from './types/types';
+import { Context } from '../../context';
 
-export default function SearchInput({ setQuery }: SearchInputProps) {
+export default function SearchInput() {
+  const { setQuery } = useContext(Context);
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const localQuery = localStorage.getItem('query');
 
-    if (localQuery) {
+    if (localQuery !== null) {
       setInputValue(localQuery);
       setQuery(localQuery);
     }
@@ -17,6 +18,7 @@ export default function SearchInput({ setQuery }: SearchInputProps) {
 
   const onSearch = () => {
     setQuery(inputValue);
+
     localStorage.setItem('query', inputValue);
   };
 
