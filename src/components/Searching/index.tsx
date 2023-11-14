@@ -62,29 +62,30 @@ function Searching() {
     setOffset(1);
   }, [query]);
 
-  let content: JSX.Element;
-
-  switch (true) {
-    case isLoading:
-      content = <Spinner />;
-      break;
-    case error !== undefined:
-      content = <Alert message="Error !!!" description={error?.toString() || ''} type="error" />;
-      break;
-    case itemsPerPage.length === 0:
-      content = <Alert message="Array is empty" description="Find something else.." type="info" />;
-      break;
-    default:
-      content = (
+  const conditions = [
+    { condition: isLoading, component: <Spinner /> },
+    {
+      condition: error !== undefined,
+      component: <Alert message="Error !!!" description={error?.toString() || ''} type="error" />,
+    },
+    {
+      condition: !itemsPerPage.length,
+      component: <Alert message="Array is empty" description="Find something else.." type="info" />,
+    },
+    {
+      condition: itemsPerPage.length,
+      component: (
         <>
           <SearchingSizeContainer>
             <PokemonsList offset={offset} />
           </SearchingSizeContainer>
           <Pagination setPage={setPage} page={page} total_pages={data?.meta.total_pages || 0} />
         </>
-      );
-      break;
-  }
+      ),
+    },
+  ];
+
+  const activeComponent = conditions.find(({ condition }) => condition)?.component;
 
   return (
     <SearchingContainer
@@ -104,7 +105,7 @@ function Searching() {
           onChange={inputRangeHandle}
         />
 
-        {content}
+        {activeComponent}
         <FallbackUIButton />
       </ContainerWrapper>
     </SearchingContainer>

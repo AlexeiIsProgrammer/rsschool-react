@@ -16,7 +16,8 @@ const handlers = [
     const pokemon = {
       name: 'ivysaur',
       sprites: {
-        front_default: '',
+        front_default:
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
       },
       height: 300,
       weight: 20,

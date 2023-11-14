@@ -23,24 +23,25 @@ const router = createBrowserRouter([
   },
 ]);
 
-// async function enableMocking() {
-//   if (!import.meta.env.DEV) {
-//     return;
-//   }
+async function enableMocking() {
+  // Remove '!' to see all items and real API callings
+  if (!import.meta.env.DEV) {
+    return;
+  }
 
-//   const { worker } = await import('./mocks/browser');
+  const { worker } = await import('./mocks/browser');
 
-//   return worker.start();
-// }
+  return worker.start();
+}
 
-// enableMocking().then(() => {
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Theme>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    </Theme>
-  </React.StrictMode>
-);
-// });
+enableMocking().then(() => {
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <Theme>
+        <Provider store={store}>
+          <RouterProvider router={router} />
+        </Provider>
+      </Theme>
+    </React.StrictMode>
+  );
+});
