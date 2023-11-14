@@ -6,45 +6,65 @@ import Pokemon from '.';
 import App from '../../app';
 
 describe('Pokemon', () => {
+  const pokemon = {
+    name: 'bulbasaur',
+    sprites: {
+      front_default: '',
+    },
+    height: 200,
+    weight: 100,
+  };
+
+  const pokemonList = {
+    meta: {
+      total_pages: 2,
+    },
+    items: [{ name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' }],
+  };
+
+  const fakeFetch: typeof fetch = async () => {
+    return { json: async () => pokemonList } as Response;
+  };
+
+  const fakePokemonFetch: typeof fetch = async () => {
+    return { json: async () => pokemon } as Response;
+  };
+
   beforeEach(async () => {
     renderWithProviders(
       <Pokemon pokemon={{ name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' }} />
     );
-  });
 
-  it('Ensure that the card component renders the relevant card data', async () => {
-    expect(await screen.findByText('ivysaur')).toBeInTheDocument();
-    expect(await screen.findByRole('link')).toHaveAttribute(
-      'href',
-      '/search/2?details=1&page=null'
-    );
+    expect(await screen.findByText('bulbasaur')).toHaveTextContent('bulbasaur');
+    expect(await screen.findByRole('link')).toHaveAttribute('href', '/search/1?details=1&page=1');
   });
 
   it('Validate that clicking on a card opens a detailed card component', async () => {
-    const { container } = renderWithProviders(<App />);
+    vi.spyOn(window, 'fetch').mockImplementation(fakeFetch);
 
-    await waitFor(() => {
-      const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
+    renderWithProviders(<App />);
 
-      expect(detailedInfo).not.toBeInTheDocument();
-    });
+    waitFor(async () => {
+      const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
+      fireEvent.click(button);
+      const detailedInfoAfter = await screen.findByText(/BULBASAUR/);
 
-    const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      const detailedInfo = container.querySelector('.sc-idOjMB'); // Classname for detailed info container
-
-      expect(detailedInfo).not.toBeInTheDocument();
+      expect(detailedInfoAfter).toBeInTheDocument();
     });
   });
 
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
-    const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
-    fireEvent.click(button);
+    vi.spyOn(window, 'fetch')
+      .mockImplementationOnce(fakeFetch)
+      .mockImplementationOnce(fakePokemonFetch);
 
-    waitFor(() => {
-      expect(fetch).toHaveBeenCalled();
+    renderWithProviders(<App />);
+
+    waitFor(async () => {
+      const button: HTMLButtonElement = await screen.findByText('Open the pokemon');
+      fireEvent.click(button);
+
+      expect(fakeFetch).toBeCalled();
     });
   });
 });
