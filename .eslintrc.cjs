@@ -56,6 +56,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-cycle': 'off',
     'react/jsx-no-constructed-context-values': 'off',
+    'no-param-reassign': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'no-nested-ternary': 'off',
     'no-restricted-globals': 'off',
   },

@@ -11,7 +11,7 @@ export const AlertWrapper = styled.div<{ $type?: string }>`
 `;
 export const AlertMessage = styled.div`
   text-align: left;
-  color: #000;
+  color: #fff;
   font-size: 30px;
 `;
 export const AlertDescription = styled(AlertMessage)`

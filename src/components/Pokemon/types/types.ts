@@ -1,4 +1,4 @@
-import { PokemonURL } from '../../../API/types/interfaces';
+import { PokemonURL } from '../../../services/PokemonAPI/types/interfaces';
 
 export type PokemonProps = {
   pokemon: PokemonURL;

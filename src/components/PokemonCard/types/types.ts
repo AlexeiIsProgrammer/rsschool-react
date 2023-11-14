@@ -1,4 +1,4 @@
-import { Pokemon } from '../../../API/types/interfaces';
+import { Pokemon } from '../../../services/PokemonAPI/types/interfaces';
 
 type PokemonCardProps = {
   pokemon: Pokemon;

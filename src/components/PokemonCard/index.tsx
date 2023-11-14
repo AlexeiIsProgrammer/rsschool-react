@@ -1,6 +1,5 @@
-import React from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import { useSearchParams } from 'react-router-dom';
 
 import Spinner from '../Spinner';
 

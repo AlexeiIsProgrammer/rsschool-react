@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { Context } from '../../context';
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
 import FallbackUIButton from '../FallbackUIButton';
@@ -11,11 +10,15 @@ import PokemonsList from '../PokemonsList';
 import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
-import { useFetchedPokemons } from '../../hooks/useFetchedPokemons';
+
+import { useGetPokemonsQuery } from '../../services/PokemonAPI';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { searchSelector } from '../../store/selectors/SearchSelector';
+import { setPageItems } from '../../store/slices/SearchSlice';
 
 function Searching() {
-  const { query, setQuery, pokemons } = useContext(Context);
-
+  const dispatch = useAppDispatch();
+  const { query, itemsPerPage } = useAppSelector(searchSelector);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageParam = +(searchParams.get('page') || 1);
@@ -23,7 +26,11 @@ function Searching() {
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
 
-  const { loading, error, totalPages } = useFetchedPokemons(offset, page);
+  const { data, isLoading, error } = useGetPokemonsQuery({
+    name: query,
+    page,
+    limit: offset,
+  });
 
   const inputRangeHandle = (e: React.FormEvent<HTMLInputElement> | number) => {
     setPage(1);
@@ -35,15 +42,19 @@ function Searching() {
   };
 
   useEffect(() => {
-    const localQuery = localStorage.getItem('query');
-
-    if (localQuery) {
-      setQuery(localQuery);
+    if (data) {
+      dispatch(
+        setPageItems({
+          query,
+          itemsPerPage: data.items,
+        })
+      );
     }
-  }, []);
+  }, [data]);
 
   useEffect(() => {
-    setSearchParams({ page: page.toString() });
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
   }, [page]);
 
   useEffect(() => {
@@ -51,29 +62,30 @@ function Searching() {
     setOffset(1);
   }, [query]);
 
-  let content: JSX.Element;
-
-  switch (true) {
-    case loading:
-      content = <Spinner />;
-      break;
-    case error !== '':
-      content = <Alert message="Error !!!" description={error} type="error" />;
-      break;
-    case pokemons.length === 0:
-      content = <Alert message="Array is empty" description="Find something else.." type="info" />;
-      break;
-    default:
-      content = (
+  const conditions = [
+    { condition: isLoading, component: <Spinner /> },
+    {
+      condition: error !== undefined,
+      component: <Alert message="Error !!!" description={error?.toString() || ''} type="error" />,
+    },
+    {
+      condition: !itemsPerPage.length,
+      component: <Alert message="Array is empty" description="Find something else.." type="info" />,
+    },
+    {
+      condition: itemsPerPage.length,
+      component: (
         <>
           <SearchingSizeContainer>
             <PokemonsList offset={offset} />
           </SearchingSizeContainer>
-          <Pagination setPage={setPage} page={page} total_pages={totalPages} />
+          <Pagination setPage={setPage} page={page} total_pages={data?.meta.total_pages || 0} />
         </>
-      );
-      break;
-  }
+      ),
+    },
+  ];
+
+  const activeComponent = conditions.find(({ condition }) => condition)?.component;
 
   return (
     <SearchingContainer
@@ -87,9 +99,13 @@ function Searching() {
       <ContainerWrapper>
         <SearchInput />
 
-        <InputRange value={offset} count={totalPages} onChange={inputRangeHandle} />
+        <InputRange
+          value={offset}
+          count={data?.meta.total_pages || 0}
+          onChange={inputRangeHandle}
+        />
 
-        {content}
+        {activeComponent}
         <FallbackUIButton />
       </ContainerWrapper>
     </SearchingContainer>

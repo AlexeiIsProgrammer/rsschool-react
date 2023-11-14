@@ -1,20 +1,25 @@
-import { useContext } from 'react';
 import { ContainerWrapper, SearchingList } from '../../styles';
 import Pokemon from '../Pokemon';
 import Alert from '../Alert';
-import { Context } from '../../context';
-import { PokemonsListProps } from './types/types';
+import { useAppSelector } from '../../hooks';
+import { searchSelector } from '../../store/selectors/SearchSelector';
+import PokemonsListProps from './types/types';
+import Spinner from '../Spinner';
 
 export default function PokemonsList({ offset }: PokemonsListProps) {
-  const { pokemons } = useContext(Context);
+  const { itemsPerPage, isLoading } = useAppSelector(searchSelector);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <ContainerWrapper>
-      {pokemons.length === 0 ? (
+      {itemsPerPage.length === 0 ? (
         <Alert message="Array is empty" description="Find something else.." type="info" />
       ) : (
         <SearchingList $offset={offset}>
-          {pokemons.map((pokemon) => (
+          {itemsPerPage.map((pokemon) => (
             <Pokemon key={pokemon.name} pokemon={pokemon} />
           ))}
         </SearchingList>

@@ -1,3 +1,5 @@
-export type PokemonsListProps = {
+type PokemonsListProps = {
   offset: number;
 };
+
+export default PokemonsListProps;

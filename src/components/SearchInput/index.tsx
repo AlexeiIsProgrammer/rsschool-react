@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../styles';
 import { Search, SearchInputWrapper } from './styles';
-import { Context } from '../../context';
+import { useAppDispatch } from '../../hooks';
+import { setQuery } from '../../store/slices/SearchSlice';
 
 export default function SearchInput() {
-  const { setQuery } = useContext(Context);
+  const dispatch = useAppDispatch();
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
@@ -12,12 +13,13 @@ export default function SearchInput() {
 
     if (localQuery !== null) {
       setInputValue(localQuery);
-      setQuery(localQuery);
+
+      dispatch(setQuery(inputValue));
     }
   }, []);
 
   const onSearch = () => {
-    setQuery(inputValue);
+    dispatch(setQuery(inputValue));
 
     localStorage.setItem('query', inputValue);
   };
