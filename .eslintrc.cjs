@@ -60,5 +60,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'no-nested-ternary': 'off',
     'no-restricted-globals': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
   },
 };

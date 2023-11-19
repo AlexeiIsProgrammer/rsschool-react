@@ -1,4 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
 import { ListItem } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
 import { PokemonProps } from './types/types';
@@ -7,8 +6,6 @@ import { setPokemonInfo } from '../../store/slices/PokemonSlice';
 
 function Pokemon({ pokemon }: PokemonProps) {
   const { url, name } = pokemon;
-
-  const [searchParams] = useSearchParams();
   const id = url.split('/').at(-2);
 
   const dispatch = useAppDispatch();
@@ -23,7 +20,13 @@ function Pokemon({ pokemon }: PokemonProps) {
         <CardHeader>{name}</CardHeader>
         <CardLink
           onClick={clickLinkHandle}
-          to={`search/${id}?details=1&page=${searchParams.get('page')}`}
+          href={{
+            pathname: '/search/[id]',
+            query: {
+              id,
+              details: '1',
+            },
+          }}
         >
           Open the pokemon
         </CardLink>

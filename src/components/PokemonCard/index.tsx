@@ -1,5 +1,6 @@
+import { useRouter } from 'next/router';
+
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { useSearchParams } from 'react-router-dom';
 
 import Spinner from '../Spinner';
 
@@ -7,10 +8,15 @@ import { PokemonDetails, PokemonDetailsClose, PokemonImage, PokemonName } from '
 import PokemonCardProps from './types/types';
 
 function PokemonCard({ pokemon, loading }: PokemonCardProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+
   const closeModalHandle = () => {
-    searchParams.set('details', '0');
-    setSearchParams(searchParams);
+    router.replace({
+      query: {
+        ...router.query,
+        details: '0',
+      },
+    });
   };
 
   return (

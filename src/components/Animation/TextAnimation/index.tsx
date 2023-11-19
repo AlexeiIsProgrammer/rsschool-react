@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import {
   PokemonAnimationWrapper,
   TextAnimationBlock,
@@ -12,7 +12,8 @@ import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
 import { setPokemonInfo } from '../../../store/slices/PokemonSlice';
 
 export default function TextAnimation() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+
   const [timer, setTimer] = useState<NodeJS.Timeout | number>(0);
 
   const dispatch = useAppDispatch();
@@ -36,8 +37,11 @@ export default function TextAnimation() {
         onClick={() => {
           dispatch(setPokemonInfo({ name: '', image: '', isActive: false }));
 
-          searchParams.set('details', '1');
-          setSearchParams(searchParams);
+          router.push({
+            query: {
+              details: '1',
+            },
+          });
 
           clearTimeout(timer);
         }}

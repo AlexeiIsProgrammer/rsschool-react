@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
@@ -19,9 +19,9 @@ import { setPageItems } from '../../store/slices/SearchSlice';
 function Searching() {
   const dispatch = useAppDispatch();
   const { query, itemsPerPage } = useAppSelector(searchSelector);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
-  const pageParam = +(searchParams.get('page') || 1);
+  const pageParam = +(router?.query?.page || 1);
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
@@ -53,8 +53,11 @@ function Searching() {
   }, [data]);
 
   useEffect(() => {
-    searchParams.set('page', page.toString());
-    setSearchParams(searchParams);
+    router.push({
+      query: {
+        page: page.toString(),
+      },
+    });
   }, [page]);
 
   useEffect(() => {
@@ -90,9 +93,12 @@ function Searching() {
   return (
     <SearchingContainer
       onClick={() => {
-        if (searchParams.get('details') && searchParams.get('details') === '1') {
-          searchParams.set('details', '0');
-          setSearchParams(searchParams);
+        if (router.query.details && router.query.details === '1') {
+          router.push({
+            query: {
+              details: '0',
+            },
+          });
         }
       }}
     >

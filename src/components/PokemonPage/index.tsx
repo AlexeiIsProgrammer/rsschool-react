@@ -1,26 +1,27 @@
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { AiFillCaretLeft } from 'react-icons/ai';
-import { useParams, useSearchParams } from 'react-router-dom';
-import Alert from '../../components/Alert';
+import Alert from '../Alert';
 import { PokemonDetailsOpen, PokemonDetailsWrapper } from './styles';
 import { useGetPokemonQuery } from '../../services/PokemonAPI';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { pokemonSelector } from '../../store/selectors/PokemonSelector';
 import { setIsImage } from '../../store/slices/PokemonSlice';
-import PokemonCard from '../../components/PokemonCard';
+import PokemonCard from '../PokemonCard';
 
 export default function PokemonPage() {
-  const { pokemonId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
+  const { id } = router.query;
+
   const [isClosed, setIsClosed] = useState(
-    searchParams.get('details') === '0' || searchParams.get('details') === null
+    router.query.details === '0' || router.query.details === null
   );
 
   const dispatch = useAppDispatch();
   const { isActive } = useAppSelector(pokemonSelector);
 
   const { data, isLoading, error } = useGetPokemonQuery({
-    id: pokemonId || '',
+    id: id?.toString() || '',
   });
 
   useEffect(() => {
@@ -38,12 +39,16 @@ export default function PokemonPage() {
   }, [isActive]);
 
   useEffect(() => {
-    if (searchParams.get('details') === '0') setIsClosed(true);
-  }, [searchParams]);
+    if (router.query.details === '0') setIsClosed(true);
+  }, [router.query.details]);
 
   const openModalHandle = () => {
-    searchParams.set('details', '1');
-    setSearchParams(searchParams);
+    router.replace({
+      query: {
+        ...router.query,
+        details: '1',
+      },
+    });
 
     setIsClosed(false);
   };

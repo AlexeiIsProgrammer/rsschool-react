@@ -1,19 +1,21 @@
-import { Outlet } from 'react-router-dom';
 import TextAnimation from '../components/Animation/TextAnimation';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Searching from '../components/Searching';
+import Theme from '../theme';
 import { Welcome } from './styles';
 
-function App() {
+function App({ children }: { children?: React.ReactNode }) {
   return (
-    <ErrorBoundary>
-      <TextAnimation />
-      <Searching />
-      <Welcome>
-        Welcome <br /> to this <br /> PokeProject
-      </Welcome>
-      <Outlet />
-    </ErrorBoundary>
+    <Theme>
+      <ErrorBoundary>
+        <TextAnimation />
+        <Searching />
+        <Welcome>
+          Welcome <br /> to this <br /> PokeProject
+        </Welcome>
+        {children}
+      </ErrorBoundary>
+    </Theme>
   );
 }
 
