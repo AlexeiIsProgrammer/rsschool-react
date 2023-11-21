@@ -1,10 +1,12 @@
+import React from 'react';
 import TextAnimation from '../components/Animation/TextAnimation';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Searching from '../components/Searching';
 import Theme from '../theme';
 import { Welcome } from './styles';
+import PokemonPage from '../components/PokemonPage';
 
-function App({ children }: { children?: React.ReactNode }) {
+function App() {
   return (
     <Theme>
       <ErrorBoundary>
@@ -13,7 +15,7 @@ function App({ children }: { children?: React.ReactNode }) {
         <Welcome>
           Welcome <br /> to this <br /> PokeProject
         </Welcome>
-        {children}
+        <PokemonPage />
       </ErrorBoundary>
     </Theme>
   );

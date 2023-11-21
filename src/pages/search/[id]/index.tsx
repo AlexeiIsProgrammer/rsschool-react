@@ -1,13 +1,18 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AiFillCaretLeft } from 'react-icons/ai';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useGetPokemonQuery } from '../../services/PokemonAPI';
-import { pokemonSelector } from '../../store/selectors/PokemonSelector';
-import { setIsImage } from '../../store/slices/PokemonSlice';
-import Alert from '../Alert';
-import PokemonCard from '../PokemonCard';
-import { PokemonDetailsOpen, PokemonDetailsWrapper } from './styles';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import {
+  getPokemon,
+  getRunningQueriesThunk,
+  useGetPokemonQuery,
+} from '../../../services/PokemonAPI';
+import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
+import { setIsImage } from '../../../store/slices/PokemonSlice';
+import Alert from '../../../components/Alert';
+import PokemonCard from '../../../components/PokemonCard';
+import { PokemonDetailsOpen, PokemonDetailsWrapper } from '../../../components/PokemonPage/styles';
+import { wrapper } from '../../../store';
 
 export default function PokemonPage() {
   const router = useRouter();
@@ -53,10 +58,6 @@ export default function PokemonPage() {
     setIsClosed(false);
   };
 
-  if (id === undefined) {
-    return null;
-  }
-
   if (error) {
     return <Alert type="error" message={error.toString()} description={error.toString()} />;
   }
@@ -79,3 +80,16 @@ export default function PokemonPage() {
     </PokemonDetailsWrapper>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const id = context.params?.id;
+  if (typeof id === 'string') {
+    store.dispatch(getPokemon.initiate({ id }));
+  }
+
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+  return {
+    props: {},
+  };
+});

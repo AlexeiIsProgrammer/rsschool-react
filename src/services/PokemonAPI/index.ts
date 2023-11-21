@@ -1,9 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; // Define a service using a base URL and expected endpoints
+import { HYDRATE } from 'next-redux-wrapper';
 import { GetPokemonArgs, GetPokemonsArgs, Pokemon, PokemonsResponse } from './types/interfaces';
 
 export const pokemonApi = createApi({
   reducerPath: 'pokemonApi',
   baseQuery: fetchBaseQuery({ baseUrl: '' }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   endpoints: (builder) => ({
     getPokemons: builder.query<PokemonsResponse, GetPokemonsArgs>({
       query: ({ limit = 1000, name = '', page = 1 }) => ({
@@ -23,4 +29,10 @@ export const pokemonApi = createApi({
   }),
 });
 
-export const { useGetPokemonsQuery, useGetPokemonQuery } = pokemonApi;
+export const {
+  useGetPokemonsQuery,
+  useGetPokemonQuery,
+  util: { getRunningQueriesThunk },
+} = pokemonApi;
+
+export const { getPokemons, getPokemon } = pokemonApi.endpoints;
