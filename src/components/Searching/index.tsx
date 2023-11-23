@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { ContainerWrapper } from '../../styles';
@@ -26,7 +26,7 @@ function Searching() {
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
 
-  const { data, isLoading, error } = useGetPokemonsQuery({
+  const { data, isFetching, error } = useGetPokemonsQuery({
     name: query,
     page,
     limit: offset,
@@ -66,7 +66,7 @@ function Searching() {
   }, [query]);
 
   const conditions = [
-    { condition: isLoading, component: <Spinner /> },
+    { condition: isFetching, component: <Spinner /> },
     {
       condition: error !== undefined,
       component: <Alert message="Error !!!" description={error?.toString() || ''} type="error" />,

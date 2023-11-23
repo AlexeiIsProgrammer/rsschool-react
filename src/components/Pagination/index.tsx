@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FIRST_PAGE } from '../../constants';
 import { Button } from '../../styles';
@@ -17,7 +17,7 @@ export default function Pagination({ total_pages, page, setPage }: PaginationPro
 
   const prevPageHandle = () => {
     setPage(page - 1);
-    router.push({
+    router.replace({
       query: {
         page: (page - 1).toString(),
       },
@@ -26,7 +26,7 @@ export default function Pagination({ total_pages, page, setPage }: PaginationPro
 
   const nextPageHandle = () => {
     setPage(page + 1);
-    router.push({
+    router.replace({
       query: {
         page: (page + 1).toString(),
       },

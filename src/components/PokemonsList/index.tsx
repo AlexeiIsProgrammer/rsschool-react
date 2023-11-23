@@ -1,3 +1,4 @@
+import React from 'react';
 import { ContainerWrapper, SearchingList } from '../../styles';
 import Pokemon from '../Pokemon';
 import Alert from '../Alert';

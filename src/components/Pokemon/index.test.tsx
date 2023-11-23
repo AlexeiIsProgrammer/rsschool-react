@@ -1,8 +1,11 @@
+import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '../../test';
 import App from '../../app';
+
+vi.mock('next/router', () => vi.importActual('next-router-mock'));
 
 describe('Pokemon', () => {
   it('Validate that card is displaying the relevant data', async () => {
@@ -26,8 +29,6 @@ describe('Pokemon', () => {
   it('Check that clicking triggers an additional API call to fetch detailed information', async () => {
     renderWithProviders(<App />);
 
-    // Check your browser
-
-    //
+    // Check index.tsx (msw is enabled)
   });
 });

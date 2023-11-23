@@ -1,8 +1,7 @@
+import React, { PropsWithChildren } from 'react';
 import { PreloadedState } from '@reduxjs/toolkit';
 import { RenderOptions, render, renderHook } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import type { AppStore, RootState } from '../store';
 import { setupStore } from '../store';
 import Theme from '../theme';
@@ -33,9 +32,7 @@ export function renderWithProviders(
   function Wrapper({ children }: PropsWithChildren) {
     return (
       <Theme>
-        <Provider store={store}>
-          <MemoryRouter>{children}</MemoryRouter>
-        </Provider>
+        <Provider store={store}>{children}</Provider>
       </Theme>
     );
   }
@@ -54,9 +51,7 @@ export function renderHookWithProviders<Result, Props = undefined>(
   function Wrapper({ children }: PropsWithChildren) {
     return (
       <Theme>
-        <Provider store={store}>
-          <MemoryRouter>{children}</MemoryRouter>
-        </Provider>
+        <Provider store={store}>{children}</Provider>
       </Theme>
     );
   }

@@ -1,10 +1,13 @@
+import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BrowserRouter } from 'react-router-dom';
+import mockRouter from 'next-router-mock';
 import Pagination from '.';
-import Theme from '../../theme';
+import { renderWithProviders } from '../../test';
+
+vi.mock('next/router', () => vi.importActual('next-router-mock'));
 
 describe('Pagination', () => {
   userEvent.setup();
@@ -13,12 +16,7 @@ describe('Pagination', () => {
 
   beforeEach(() => {
     act(() => {
-      render(
-        <Theme>
-          <Pagination page={1} total_pages={5} setPage={setPage} />
-        </Theme>,
-        { wrapper: BrowserRouter }
-      );
+      renderWithProviders(<Pagination page={1} total_pages={5} setPage={setPage} />);
     });
   });
 
@@ -58,7 +56,7 @@ describe('Pagination', () => {
         await userEvent.click(nextButton);
       });
 
-      expect(location.search).toBe(`?page=2`);
+      expect(mockRouter.query.page).toBe('2');
     });
   });
 });

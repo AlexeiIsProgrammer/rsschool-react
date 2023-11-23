@@ -4,9 +4,8 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import Searching from '../components/Searching';
 import Theme from '../theme';
 import { Welcome } from './styles';
-import PokemonPage from '../components/PokemonPage';
 
-function App() {
+function App({ children }: { children?: JSX.Element }) {
   return (
     <Theme>
       <ErrorBoundary>
@@ -15,7 +14,7 @@ function App() {
         <Welcome>
           Welcome <br /> to this <br /> PokeProject
         </Welcome>
-        <PokemonPage />
+        {children}
       </ErrorBoundary>
     </Theme>
   );

@@ -11,12 +11,14 @@ import { pokemonSelector } from '../../../store/selectors/PokemonSelector';
 import { setIsImage } from '../../../store/slices/PokemonSlice';
 import Alert from '../../../components/Alert';
 import PokemonCard from '../../../components/PokemonCard';
-import { PokemonDetailsOpen, PokemonDetailsWrapper } from '../../../components/PokemonPage/styles';
+import { PokemonDetailsOpen, PokemonDetailsWrapper } from './styles';
 import { wrapper } from '../../../store';
+import App from '../../../app';
 
 export default function PokemonPage() {
   const router = useRouter();
-  const { id } = router.query;
+  const id = router?.query?.id || '1';
+  const { isReady } = router;
 
   const [isClosed, setIsClosed] = useState(
     router.query.details === '0' || router.query.details === null
@@ -58,6 +60,10 @@ export default function PokemonPage() {
     setIsClosed(false);
   };
 
+  if (!isReady) {
+    return null;
+  }
+
   if (error) {
     return <Alert type="error" message={error.toString()} description={error.toString()} />;
   }
@@ -69,20 +75,23 @@ export default function PokemonPage() {
   }
 
   return (
-    <PokemonDetailsWrapper $isClosed={isClosed}>
-      {isClosed ? (
-        <PokemonDetailsOpen title="open" onClick={openModalHandle}>
-          <AiFillCaretLeft />
-        </PokemonDetailsOpen>
-      ) : (
-        <PokemonCard pokemon={data} loading={isLoading} />
-      )}
-    </PokemonDetailsWrapper>
+    <App>
+      <PokemonDetailsWrapper $isClosed={isClosed}>
+        {isClosed ? (
+          <PokemonDetailsOpen title="open" onClick={openModalHandle}>
+            <AiFillCaretLeft />
+          </PokemonDetailsOpen>
+        ) : (
+          <PokemonCard pokemon={data} loading={isLoading} />
+        )}
+      </PokemonDetailsWrapper>
+    </App>
   );
 }
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const id = context.params?.id;
+
   if (typeof id === 'string') {
     store.dispatch(getPokemon.initiate({ id }));
   }

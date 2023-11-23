@@ -1,3 +1,5 @@
+import React from 'react';
+import { useRouter } from 'next/router';
 import { ListItem } from '../../styles';
 import { Card, CardHeader, CardLink } from './styles';
 import { PokemonProps } from './types/types';
@@ -5,6 +7,7 @@ import { useAppDispatch } from '../../hooks';
 import { setPokemonInfo } from '../../store/slices/PokemonSlice';
 
 function Pokemon({ pokemon }: PokemonProps) {
+  const router = useRouter();
   const { url, name } = pokemon;
   const id = url.split('/').at(-2);
 
@@ -21,10 +24,10 @@ function Pokemon({ pokemon }: PokemonProps) {
         <CardLink
           onClick={clickLinkHandle}
           href={{
-            pathname: '/search/[id]',
+            pathname: `/search/${id}`,
             query: {
-              id,
               details: '1',
+              page: router?.query?.page || '1',
             },
           }}
         >
