@@ -11,10 +11,15 @@ import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 
-import { useGetPokemonsQuery } from '../../services/PokemonAPI';
+import {
+  getPokemons,
+  getRunningQueriesThunk,
+  useGetPokemonsQuery,
+} from '../../services/PokemonAPI';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { searchSelector } from '../../store/selectors/SearchSelector';
 import { setPageItems } from '../../store/slices/SearchSlice';
+import { wrapper } from '../../store';
 
 function Searching() {
   const dispatch = useAppDispatch();
@@ -119,3 +124,17 @@ function Searching() {
 }
 
 export default Searching;
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const id = context.params?.id;
+
+  if (typeof id === 'string') {
+    store.dispatch(getPokemons.initiate({ id }));
+  }
+
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+  return {
+    props: {},
+  };
+});
