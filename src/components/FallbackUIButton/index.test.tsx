@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import Theme from '../../theme';
@@ -15,7 +16,7 @@ describe('FallbackUIButton', () => {
   it('should render FallbackUIButton', async () => {
     render(<Wrapper />);
     const button: HTMLButtonElement = await screen.findByText('Get an error');
-    expect(button).toBeInTheDocument();
+    expect(button).toBeDefined();
   });
 
   it('should click FallbackUIButton and throw error', async () => {

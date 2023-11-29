@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../styles';
 import { Search, SearchInputWrapper } from './styles';
 import { useAppDispatch } from '../../hooks';
@@ -14,7 +14,7 @@ export default function SearchInput() {
     if (localQuery !== null) {
       setInputValue(localQuery);
 
-      dispatch(setQuery(inputValue));
+      dispatch(setQuery(localQuery));
     }
   }, []);
 

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -15,9 +15,18 @@
     "isolatedModules": true,
     "noImplicitAny": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "types": ["vitest/globals"]
+    "jsx": "preserve",
+    "types": ["vitest/globals"],
+    "plugins": [{ "name": "next" }],
+    "incremental": true
   },
-  "include": ["setupTests.ts", "vite.config.ts", ".eslintrc.cjs", "src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "setupTests.ts",
+    "vite.config.ts",
+    ".eslintrc.cjs",
+    "src",
+    "./dist/types/**/*.ts",
+    "./next-env.d.ts"
+  ],
+  "exclude": ["./node_modules"]
 }

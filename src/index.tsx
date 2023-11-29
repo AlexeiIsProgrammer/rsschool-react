@@ -1,31 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import App from './app';
 import './index.scss';
-import ErrorPage from './pages/ErrorPage';
-import PokemonPage from './pages/PokemonPage';
 import { store } from './store';
 import Theme from './theme';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: 'search/:pokemonId',
-        element: <PokemonPage />,
-      },
-    ],
-  },
-]);
+import Page from './pages';
 
 async function enableMocking() {
   // Remove '!' to see all items and real API callings
-  if (!import.meta.env.DEV) {
+  if (process.env.NODE_ENV === 'development') {
     return;
   }
 
@@ -39,7 +22,7 @@ enableMocking().then(() => {
     <React.StrictMode>
       <Theme>
         <Provider store={store}>
-          <RouterProvider router={router} />
+          <Page />
         </Provider>
       </Theme>
     </React.StrictMode>

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { ContainerWrapper } from '../../styles';
 import Alert from '../Alert';
@@ -11,22 +11,27 @@ import SearchInput from '../SearchInput';
 import Spinner from '../Spinner';
 import { SearchingContainer, SearchingSizeContainer } from './styles';
 
-import { useGetPokemonsQuery } from '../../services/PokemonAPI';
+import {
+  getPokemons,
+  getRunningQueriesThunk,
+  useGetPokemonsQuery,
+} from '../../services/PokemonAPI';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { searchSelector } from '../../store/selectors/SearchSelector';
 import { setPageItems } from '../../store/slices/SearchSlice';
+import { wrapper } from '../../store';
 
 function Searching() {
   const dispatch = useAppDispatch();
   const { query, itemsPerPage } = useAppSelector(searchSelector);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const router = useRouter();
 
-  const pageParam = +(searchParams.get('page') || 1);
+  const pageParam = +(router?.query?.page || 1);
 
   const [offset, setOffset] = useState(1);
   const [page, setPage] = useState(pageParam);
 
-  const { data, isLoading, error } = useGetPokemonsQuery({
+  const { data, isFetching, error } = useGetPokemonsQuery({
     name: query,
     page,
     limit: offset,
@@ -53,8 +58,11 @@ function Searching() {
   }, [data]);
 
   useEffect(() => {
-    searchParams.set('page', page.toString());
-    setSearchParams(searchParams);
+    router.push({
+      query: {
+        page: page.toString(),
+      },
+    });
   }, [page]);
 
   useEffect(() => {
@@ -63,7 +71,7 @@ function Searching() {
   }, [query]);
 
   const conditions = [
-    { condition: isLoading, component: <Spinner /> },
+    { condition: isFetching, component: <Spinner /> },
     {
       condition: error !== undefined,
       component: <Alert message="Error !!!" description={error?.toString() || ''} type="error" />,
@@ -90,9 +98,12 @@ function Searching() {
   return (
     <SearchingContainer
       onClick={() => {
-        if (searchParams.get('details') && searchParams.get('details') === '1') {
-          searchParams.set('details', '0');
-          setSearchParams(searchParams);
+        if (router.query.details && router.query.details === '1') {
+          router.push({
+            query: {
+              details: '0',
+            },
+          });
         }
       }}
     >
@@ -113,3 +124,17 @@ function Searching() {
 }
 
 export default Searching;
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+  const id = context.params?.id;
+
+  if (typeof id === 'string') {
+    store.dispatch(getPokemons.initiate({ id }));
+  }
+
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+  return {
+    props: {},
+  };
+});

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import '../../index.scss';
 
 export const ErrorWrapper = styled.div`
   display: flex;
@@ -17,7 +16,7 @@ export const ErrorTitle = styled.h1`
   text-align: center;
   font-size: 40px;
 `;
-export const ErrorDescription = styled.h2`
+export const ErrorDescription = styled.p`
   text-align: center;
   color: gray;
   font-size: 24px;

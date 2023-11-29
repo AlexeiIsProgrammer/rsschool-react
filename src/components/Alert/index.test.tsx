@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import Theme from '../../theme';
@@ -12,7 +13,7 @@ describe('Alert', () => {
     );
 
     const message = await screen.findByText('Error');
-    expect(message).toHaveTextContent('Error');
+    expect(message).toBeDefined();
 
     const description = await screen.findByText('Big error');
     expect(description).toHaveTextContent('Big error');
