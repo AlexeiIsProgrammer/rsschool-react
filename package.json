@@ -50,8 +50,7 @@
     "typescript": "^5.0.2",
     "typescript-plugin-css-modules": "^5.0.2",
     "vite": "^4.4.5",
-    "vite-plugin-node-polyfills": "^0.15.0",
-    "vitest": "^0.34.6"
+    "vite-plugin-node-polyfills": "^0.15.0"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

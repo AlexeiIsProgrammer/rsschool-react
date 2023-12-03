@@ -8,10 +8,4 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./setupTests.ts'],
-  },
 });
