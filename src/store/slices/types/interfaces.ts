@@ -5,10 +5,11 @@ export interface FormValues {
   password: string;
   repeatPassword: string;
   gender: string;
-  picture: string;
+  picture: FileList | null | string;
   privacy: boolean;
+  country: string;
 }
 
 export interface FormState {
-  form: FormValues;
+  form: FormValues[];
 }

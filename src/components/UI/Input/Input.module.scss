@@ -1,0 +1,13 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+
+  &__error {
+    color: red;
+    position: absolute;
+    left: 0;
+    top: 100%;
+  }
+}
