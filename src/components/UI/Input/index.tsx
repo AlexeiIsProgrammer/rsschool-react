@@ -6,7 +6,7 @@ type Props = {
   error?: string | string[];
 } & InputHTMLAttributes<HTMLInputElement>;
 
-const Input = forwardRef<HTMLInputElement, Props>(({ error, type, name, ...props }, ref) => {
+const Input = forwardRef<HTMLInputElement, Props>(({ error, name, ...props }, ref) => {
   const passwordStates = {
     1: 'one',
     2: 'two',

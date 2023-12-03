@@ -174,8 +174,10 @@ export default function UncontrolledPage() {
           ]}
           ref={genderRef}
         />
-        Policy
-        <Input placeholder="Policy" error={objError.privacy} type="checkbox" ref={privacyRef} />
+        <div>
+          <span>Policy</span>
+          <Input placeholder="Policy" error={objError.privacy} type="checkbox" ref={privacyRef} />
+        </div>
         <Input placeholder="Picture" error={objError.picture} type="file" ref={pictureRef} />
         <Select
           autocompletable
