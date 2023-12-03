@@ -130,7 +130,15 @@ export default function UncontrolledPage() {
         const validationObj = {};
 
         error.inner.forEach((err) => {
-          validationObj[err.path] = err.message;
+          if (err.path === 'password') {
+            if (validationObj[err.path]) {
+              validationObj[err.path].push(err.message);
+            } else {
+              validationObj[err.path] = [err.message];
+            }
+          } else {
+            validationObj[err.path] = err.message;
+          }
         });
 
         setObjError(validationObj);
@@ -145,8 +153,19 @@ export default function UncontrolledPage() {
         <Input placeholder="Name" error={objError.name} ref={nameRef} />
         <Input placeholder="Age" error={objError.age} type="number" ref={ageRef} />
         <Input placeholder="Email" error={objError.email} type="email" ref={emailRef} />
-        <Input placeholder="Pass" error={objError.password} ref={passwordRef} />
-        <Input placeholder="Repeat pass" error={objError.repeatPassword} ref={repeatPasswordRef} />
+        <Input
+          placeholder="Pass"
+          name="password"
+          error={objError.password}
+          type="password"
+          ref={passwordRef}
+        />
+        <Input
+          placeholder="Repeat pass"
+          error={objError.repeatPassword}
+          type="password"
+          ref={repeatPasswordRef}
+        />
         <Select
           data={[
             { name: 'male', value: 'male' },

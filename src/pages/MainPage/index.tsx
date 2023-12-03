@@ -14,6 +14,7 @@ export default function MainPage() {
         <Link to="uncontrolled">Uncontrolled</Link>
       </div>
       <div className={styles.forms}>
+        <div className={styles['forms__form-list']} />
         <div className={styles['forms__form-list']}>
           {uncontrolledForm.map((data, index, arr) => (
             <div
