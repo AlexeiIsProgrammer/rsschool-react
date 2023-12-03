@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import styles from './Main.module.scss';
 import { useAppSelector } from '../../hooks';
 import { uncontrolledSelector } from '../../store/selectors/UncontrolledSelectors';
+import MainItem from '../../components/MainItem';
+import { reactHookFormSelector } from '../../store/selectors/ReactHookFormSelectors';
 
 export default function MainPage() {
   const { form: uncontrolledForm } = useAppSelector(uncontrolledSelector);
+  const { form: reactHookForm } = useAppSelector(reactHookFormSelector);
 
   return (
     <>
@@ -14,30 +17,22 @@ export default function MainPage() {
         <Link to="uncontrolled">Uncontrolled</Link>
       </div>
       <div className={styles.forms}>
-        <div className={styles['forms__form-list']} />
+        <div className={styles['forms__form-list']}>
+          {reactHookForm.map((data, index, arr) => (
+            <MainItem
+              key={data.picture?.toString() || index}
+              isActive={arr.length - 1 === index}
+              data={data}
+            />
+          ))}
+        </div>
         <div className={styles['forms__form-list']}>
           {uncontrolledForm.map((data, index, arr) => (
-            <div
+            <MainItem
               key={data.picture?.toString() || index}
-              className={`${styles.forms__form} ${
-                arr.length - 1 === index ? styles.forms__form_last : ''
-              }`}
-            >
-              <h3>Name: {data.name}</h3>
-              <p>Age: {data.age}</p>
-              <p>Gender: {data.gender}</p>
-              <p>E-Mail: {data.email}</p>
-              <p>Country: {data.country}</p>
-              <p>Agree?: {data.privacy ? 'Yes' : 'No'}</p>
-              <p>Pass: {data.password}</p>
-              <img
-                src={data.picture}
-                style={{
-                  width: '100%',
-                }}
-                alt={data.name}
-              />
-            </div>
+              isActive={arr.length - 1 === index}
+              data={data}
+            />
           ))}
         </div>
       </div>

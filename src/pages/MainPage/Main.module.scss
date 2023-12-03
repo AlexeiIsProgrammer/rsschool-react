@@ -28,33 +28,4 @@ p {
     flex-direction: column;
     gap: 40px;
   }
-
-  &__form {
-    border: 1px solid black;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: flex-start;
-    justify-content: flex-start;
-
-    &_last {
-      border: 5px dashed green;
-      animation: activeAnim 1s infinite;
-    }
-  }
-}
-
-@keyframes activeAnim {
-  0% {
-    scale: 1;
-  }
-
-  50% {
-    scale: 0.97;
-  }
-
-  100% {
-    scale: 1;
-  }
 }

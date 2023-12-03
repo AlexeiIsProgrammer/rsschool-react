@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { createRef, useState } from 'react';
-import { number, object, string, ObjectSchema, boolean, ref, mixed, ValidationError } from 'yup';
+import { ValidationError } from 'yup';
 import Input from '../../components/UI/Input';
 import Select from '../../components/UI/Select';
 import { useAppDispatch } from '../../hooks';
@@ -9,6 +9,8 @@ import { Button } from '../../styles';
 import { FormValues } from '../../store/slices/types/interfaces';
 
 import styles from './Uncontrolled.module.scss';
+import { toBase64 } from '../../utils';
+import { schema } from '../../schema';
 
 export default function UncontrolledPage() {
   const nameRef = createRef<HTMLInputElement>();
@@ -25,8 +27,6 @@ export default function UncontrolledPage() {
 
   const dispatch = useAppDispatch();
 
-  const SUPPORTED_FORMATS = ['image/png', 'image/jpeg'];
-
   const [objError, setObjError] = useState({
     name: '',
     age: '',
@@ -39,55 +39,8 @@ export default function UncontrolledPage() {
     country: '',
   });
 
-  const schema: ObjectSchema<FormValues> = object({
-    name: string()
-      .required()
-      .test(
-        'Must be uppercase',
-        'Name must be with first letter in uppercase',
-        (value) => value.length !== 0 && value[0] === value[0].toUpperCase()
-      ),
-    age: number().required().positive('Age must be a positive'),
-    email: string().email().required(),
-    password: string()
-      .required()
-      .test('Must have numbers', 'Password must contain 1 number', (value) =>
-        Boolean(value.match(/\d/))
-      )
-      .test('Must have lowercased letter', 'Password must contain 1 lowercased letter', (value) =>
-        value.split('').some((symb) => symb !== symb.toUpperCase())
-      )
-      .test('Must have uppercased letter', 'Password must contain 1 uppercased letter', (value) =>
-        value.split('').some((symb) => symb !== symb.toLowerCase())
-      )
-      .test('Must be special character', 'Password must contain 1 special character', (value) =>
-        Boolean(value.match(/[!@#$%^&*(),.?":{}|<>]/g))
-      ),
-    repeatPassword: string().oneOf([ref('password')], 'Passwords must match'),
-    gender: string().nullable().required(),
-    privacy: boolean().required(),
-    picture: mixed<FileList>()
-      .required('A file is required')
-      .test('fileslength', 'Choose the file', (value) => Boolean(value))
-      .test('filesize', 'INCORRECT filesize', (value) => {
-        return value && value[0] && value[0].size < 2000000;
-      })
-      .test(
-        'fileFormat',
-        'Unsupported Format',
-        (value) => value && value[0] && SUPPORTED_FORMATS.includes(value[0].type)
-      ),
-  });
-
-  const toBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-    });
-
-  const formSubmitHandle = async () => {
+  const formSubmitHandle = async (e) => {
+    e.preventDefault();
     const currentValues: FormValues = {
       name: nameRef.current?.value || '',
       age: Number(ageRef.current?.value) || 0,
@@ -149,7 +102,7 @@ export default function UncontrolledPage() {
   return (
     <div className={styles.uncontrolled}>
       <h1>Uncontrolled FORM</h1>
-      <div className={styles.uncontrolled__container}>
+      <form onSubmit={formSubmitHandle} className={styles.uncontrolled__container}>
         <Input placeholder="Name" error={objError.name} ref={nameRef} />
         <Input placeholder="Age" error={objError.age} type="number" ref={ageRef} />
         <Input placeholder="Email" error={objError.email} type="email" ref={emailRef} />
@@ -189,8 +142,8 @@ export default function UncontrolledPage() {
           ]}
           ref={countryRef}
         />
-        <Button onClick={formSubmitHandle}>Click</Button>
-      </div>
+        <Button>Click</Button>
+      </form>
     </div>
   );
 }
