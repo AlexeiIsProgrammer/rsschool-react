@@ -13,6 +13,13 @@ export const Button = styled.button`
   &:hover {
     border-type: dashed;
   }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.7;
+    color: black;
+    background-color: gray;
+  }
 `;
 
 export const Row = styled.div`

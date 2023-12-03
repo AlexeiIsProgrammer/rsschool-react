@@ -1,0 +1,15 @@
+.hook-form {
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 900px;
+  height: 100%;
+  border: 1px solid blue;
+  border-radius: 10px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+}

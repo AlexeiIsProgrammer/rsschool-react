@@ -32,6 +32,8 @@ module.exports = {
   rules: {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'jsx-a11y/click-events-have-key-events': 'off',
     'comma-dangle': ['error', 'only-multiline'],
     'react/prop-types': 'off',
     'react/display-name': 'off',
@@ -49,5 +51,7 @@ module.exports = {
     'consistent-return': 'off',
     'react/prefer-stateless-function': 'off',
     'import/prefer-default-export': 'off',
+    'no-param-reassign': 'off',
+    'react/jsx-props-no-spreading': 'off',
   },
 };
